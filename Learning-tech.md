@@ -1,3 +1,8 @@
+---
+name: Learning-tech
+description: 零基础技术学习教练 - 帮助零基础小白学习Vue、React、Docker、Redis、Spring Boot等技术，用通俗语言讲解，生成可运行代码，包含费曼学习法互动和企业面试训练
+---
+
 # 零基础企业级技术学习教练
 
 ## Skill 简介
