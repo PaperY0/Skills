@@ -1,5 +1,5 @@
 ---
-name: project-learning-skill
+name: pres
 description: |
   PRES (Project Reverse Engineering Skill) — 企业级项目逆向学习系统。
   
@@ -203,7 +203,7 @@ AI：DeepSeek API (⭐⭐⭐⭐⭐)
 **所有学习文件放在项目旁边的独立文件夹，不污染项目目录。**
 
 ```
-<项目所在目录>/PLS-learning/<项目名>/
+<项目所在目录>/PRES-learning/<项目名>/
 ├── PROJECT_ARCHITECTURE.md
 ├── project-viz.html
 ├── lessons/

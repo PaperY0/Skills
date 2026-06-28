@@ -1,4 +1,4 @@
-/* ═══════════════ PLS Quiz Engine ═══════════════ */
+/* ═══════════════ PRE Quiz Engine ═══════════════ */
 function checkQuiz(id){
   const container=document.querySelector(`[data-quiz-id="${id}"]`);
   if(!container)return;

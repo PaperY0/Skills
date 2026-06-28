@@ -1,6 +1,6 @@
 # 项目可视化详细制作指南
 
-当 PLS Skill 需要对一个项目进行可视化时，遵循以下指南。
+当 PRES Skill 需要对一个项目进行可视化时，遵循以下指南。
 
 ---
 
@@ -140,7 +140,7 @@ const TECH_STACK = [
 **所有学习文件放在项目旁边的独立文件夹，不污染项目目录。**
 
 ```
-<项目所在目录>/PLS-learning/<项目名>/
+<项目所在目录>/PRES-learning/<项目名>/
 ├── PROJECT_ARCHITECTURE.md   ← Markdown 架构文档
 ├── project-viz.html          ← 交互式可视化页面
 ├── lessons/                  ← 课程文件
