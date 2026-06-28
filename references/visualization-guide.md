@@ -55,13 +55,13 @@
   - `--accent2` ← 项目的次要强调色
   - `--glass-bg` ← 项目主色 + 透明度（毛玻璃效果）
   - `--shadow-*` ← 项目主色的淡色变体
-- 例如 Lumi 项目是暖玫瑰色调 → CSS 用 `#FDF8F4`、`#c8607a` 等暖色系
+- 例如：某项目主色为蓝色 `#1a73e8` → `--accent:#1a73e8`，`--glass-bg:rgba(26,115,232,0.08)`
 
 ### 模板占位符清单
 
 | 占位符 | 替换内容 |
 |--------|---------|
-| `__PROJECT_TITLE__` | 项目标题（如 "🌸 Lumi AI 恋爱助手"） |
+| `__PROJECT_TITLE__` | 项目标题（如 "📦 MyProject" 或项目 package.json 的 name） |
 | `__PROJECT_TAGLINE__` | 一句话描述 |
 | `__PROJECT_NAME__` | 项目短名（用于弹窗等处） |
 | `__STATS__` | 5 个 `<div class="stat">` 统计卡片 HTML |
@@ -81,17 +81,17 @@
 
 ```javascript
 const FILE_TREE = [
-  {name:'Lumi', type:'folder', desc:'项目描述', analogy:'', consequence:'', when:'', children:[
+  {name:'my-project', type:'folder', desc:'<项目描述>', analogy:'', consequence:'', when:'', children:[
     {name:'package.json', type:'file', ext:'json', desc:'项目身份证',
      analogy:'就像超市的营业执照——证明这个项目是谁的、用什么材料做的',
-     consequence:'npm install 无法运行，所有依赖找不到，项目等于白纸',
+     consequence:'npm install 无法运行，所有依赖找不到',
      when:'要加新的第三方库时'},
-    {name:'src', type:'folder', desc:'前端源代码', analogy:'', consequence:'', when:'', children:[
+    {name:'src', type:'folder', desc:'<源代码目录>', analogy:'', consequence:'', when:'', children:[
       {name:'main.tsx', type:'file', ext:'tsx', desc:'应用启动入口',
        analogy:'就像商场的总电闸——推开它，整个商场亮起来',
        consequence:'整个应用无法启动，浏览器白屏',
        when:'要改应用的启动配置时'},
-      // ...每个文件都带专属 analog/consequence/when
+      // ...每个文件都带专属 analogy/consequence/when
     ]}
   ]}
 ];

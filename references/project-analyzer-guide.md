@@ -83,15 +83,15 @@ Lesson 04：数据到底流向哪里？
 
 ### 映射示例
 
-**Lumi 项目画像排序：**
+**某 React+AI 全栈项目画像排序：**
 ```
 React ⭐⭐⭐⭐⭐ → 第二阶段：理解 React
 TypeScript ⭐⭐⭐⭐⭐ → 第三阶段：理解 TypeScript
-AI ⭐⭐⭐⭐⭐ → 第四阶段：理解 AI 系统
-IndexedDB ⭐⭐⭐⭐ → 第五阶段：理解数据层
-Zustand ⭐⭐⭐⭐ → 第六阶段：理解状态管理
-Express ⭐⭐⭐⭐ → 第七阶段：理解后端
-Tailwind ⭐⭐⭐ → 第八阶段：理解样式系统
+AI Service ⭐⭐⭐⭐⭐ → 第四阶段：理解 AI 系统
+Database ⭐⭐⭐⭐ → 第五阶段：理解数据层
+State Mgmt ⭐⭐⭐⭐ → 第六阶段：理解状态管理
+Backend ⭐⭐⭐⭐ → 第七阶段：理解后端
+CSS ⭐⭐⭐ → 第八阶段：理解样式系统
 ```
 
 **Next.js + Prisma 项目画像排序：**

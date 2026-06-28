@@ -9,15 +9,17 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --lesson-ink:#4a3038;--lesson-ink-muted:#8a6a70;--lesson-ink-subtle:#b0989e;
-  --lesson-bg:#FDF8F4;--lesson-card:#fffbf9;--lesson-accent:#c8607a;
-  --lesson-accent-soft:rgba(200,96,122,0.08);
-  --lesson-radius:18px;--lesson-shadow:0 2px 12px rgba(200,96,122,0.08);
+  /* 🎨 __PROJECT_COLORS__ → MUST be replaced per project via SKILL.md Step 0.
+     Neutral defaults below — functional but deliberately generic to force replacement. */
+  --lesson-ink:__PROJECT_INK__;--lesson-ink-muted:__PROJECT_INK_MUTED__;--lesson-ink-subtle:__PROJECT_INK_SUBTLE__;
+  --lesson-bg:__PROJECT_BG__;--lesson-card:__PROJECT_CARD__;--lesson-accent:__PROJECT_ACCENT__;
+  --lesson-accent-soft:__PROJECT_ACCENT_SOFT__;
+  --lesson-radius:18px;--lesson-shadow:0 2px 12px rgba(0,0,0,0.06);
 }
 
 body{
   font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
-  background:linear-gradient(160deg,#FDF8F4 0%,#F8EEF4 18%,#EEE8F4 36%,#F4EEE4 54%,#EEF4F0 72%,#F8F4F8 88%,#FDF4EE 100%);
+  background:__PROJECT_BG_GRADIENT__;
   color:var(--lesson-ink);min-height:100vh;line-height:1.75;
   font-size:17px;font-weight:500;letter-spacing:0.01em;
   -webkit-font-smoothing:antialiased;max-width:800px;margin:0 auto;padding:40px 24px 80px;

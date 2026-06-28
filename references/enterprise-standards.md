@@ -156,7 +156,7 @@ await saveProfile(data);
 - `noImplicitAny`：防止"忘记写类型"的代码
 - 这些设置能帮 AI 更好地理解你的代码意图
 
-### Lumi 项目的配置
+### 典型 TypeScript 项目配置示例
 ```json
 {
   "compilerOptions": {

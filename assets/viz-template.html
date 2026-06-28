@@ -17,21 +17,20 @@
 /* ═══════════════ Reset & Design Tokens ═══════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* 🎨 Palette defaults — customize per project:
-     Read App.tsx / globals.css body background → set on body{}
-     Read primary accent → --accent, --accent-glass, --shadow-*
-     Read secondary accent → --accent2 */
-  --ink:#4a3038;--ink-muted:#8a6a70;--ink-subtle:#b0989e;
-  --canvas:#fffbf9;--canvas-parchment:#faf5f2;
-  --accent:#c8607a;--accent-glass:rgba(200,96,122,0.10);--accent2:#b0a0cc;
-  --divider:rgba(200,96,122,0.08);--hairline:rgba(200,96,122,0.12);
-  /* Glass tokens */
-  --glass-bg:rgba(255,251,249,0.78);--glass-bg-strong:rgba(255,248,245,0.92);
+  /* 🎨 __PROJECT_COLORS__ → MUST be replaced via SKILL.md Step 0.
+     Extract from project CSS/App.tsx/globals.css before generating HTML.
+     If project has NO CSS (CLI/backend): use neutral grays (see SKILL.md Step 0 fallback). */
+  --ink:__PROJECT_INK__;--ink-muted:__PROJECT_INK_MUTED__;--ink-subtle:__PROJECT_INK_SUBTLE__;
+  --canvas:__PROJECT_CANVAS__;--canvas-parchment:__PROJECT_PARCHMENT__;
+  --accent:__PROJECT_ACCENT__;--accent-glass:__PROJECT_ACCENT_GLASS__;--accent2:__PROJECT_ACCENT2__;
+  --divider:__PROJECT_DIVIDER__;--hairline:__PROJECT_HAIRLINE__;
+  /* Glass tokens — adjusted per accent opacity */
+  --glass-bg:__PROJECT_GLASS_BG__;--glass-bg-strong:__PROJECT_GLASS_BG_STRONG__;
   --glass-border:rgba(255,255,255,0.5);--glass-blur:24px;
-  /* Shadows — warm */
-  --shadow-product:0 4px 24px rgba(200,96,122,0.10);
-  --shadow-card:0 1px 3px rgba(200,96,122,0.05),0 0 0 1px rgba(200,96,122,0.04);
-  --shadow-elevated:0 8px 40px rgba(200,96,122,0.16);
+  /* Shadows — neutral defaults, tinted per accent after color extraction */
+  --shadow-product:0 4px 24px rgba(0,0,0,0.08);
+  --shadow-card:0 1px 3px rgba(0,0,0,0.04),0 0 0 1px rgba(0,0,0,0.03);
+  --shadow-elevated:0 8px 40px rgba(0,0,0,0.12);
   /* Radius scale */
   --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:24px;--r-pill:9999px;
   /* File type colors */
@@ -44,8 +43,8 @@
 }
 body{
   font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
-  /* ⚠️ MUST be replaced with project's actual background gradient */
-  background:linear-gradient(160deg,#FDF8F4 0%,#F8EEF4 18%,#EEE8F4 36%,#F4EEE4 54%,#EEF4F0 72%,#F8F4F8 88%,#FDF4EE 100%);
+  /* ⚠️ __PROJECT_BG__ MUST be replaced via SKILL.md Step 0 */
+  background:__PROJECT_BG_GRADIENT__;
   color:var(--ink);min-height:100vh;line-height:1.55;
   font-size:17px;font-weight:500;letter-spacing:0.01em;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;

@@ -216,8 +216,27 @@ AI：DeepSeek API (⭐⭐⭐⭐⭐)
 
 ## 核心功能一：项目可视化（双格式输出）
 
-### Step 0：提取项目配色
-读取项目 CSS/App.tsx → 提取 background/accent → 映射到 HTML 变量
+### Step 0：提取项目配色（强制执行，不可跳过）
+
+**在生成任何 HTML/CSS 之前，必须完成颜色提取。未提取直接生成 = Bug。**
+
+1. 搜索项目中的颜色来源：
+   - `grep -r "background\|accent\|primary\|--" <项目>/src --include="*.css" --include="*.tsx" -l | head -5`
+   - 优先读取 `App.tsx`、`globals.css`、`index.css`、`tailwind.css`
+2. 提取值：
+   - `body`/`:root` 的 `background` → 映射为 `__PROJECT_BG_GRADIENT__`
+   - 主强调色（按钮、链接的颜色） → 映射为 `__PROJECT_ACCENT__`
+   - 次要强调色 → 映射为 `__PROJECT_ACCENT2__`
+   - 文字色 → 映射为 `__PROJECT_INK__`
+3. 生成 glass/shadow 变体（基于 accent 色值 + 透明度计算）
+4. **如果项目无 CSS 文件**（CLI 工具、纯后端、库项目）：使用中性方案
+   ```
+   __PROJECT_INK__:#333; __PROJECT_INK_MUTED__:#666; __PROJECT_INK_SUBTLE__:#999
+   __PROJECT_CANVAS__:#fff; __PROJECT_PARCHMENT__:#f8f8f8
+   __PROJECT_ACCENT__:#555; __PROJECT_ACCENT2__:#888
+   __PROJECT_BG_GRADIENT__:#fafafa
+   ```
+5. 将提取的值替换到 `viz-template.html` 和 `lesson-styles.css` 的所有 `__PROJECT_*__` 占位符
 
 ### Step 1：项目侦察 + 强制计数
 `find <项目>/src -type f | wc -l` → FILE_TREE 条目数必须 ≥ 这个数字
@@ -229,6 +248,8 @@ AI：DeepSeek API (⭐⭐⭐⭐⭐)
 - `<学习文件夹>/project-viz.html`
 - FILE_TREE 每个节点必须含 `analogy`/`consequence`/`when` 专属字段
 - 配色匹配项目、毛玻璃+卡片滑入、Nunito 圆润字体
+- **⚠️ 生成后验证**：`grep -c '__PROJECT_' <学习文件夹>/project-viz.html` 必须返回 0（所有占位符已替换）。如果保留占位符直接交付 = Bug。
+- **⚠️ 生成后验证**：`grep '#c8607a\|#FDF8F4\|#4a3038\|#b0a0cc' <学习文件夹>/project-viz.html` 必须返回 0（无 Lumi 色泄漏）
 
 ---
 
@@ -263,6 +284,13 @@ Lesson XX：<课程标题>
 ⑬ 检索练习（3个回顾问题）
 ⑭ 代码雷达（识别特征清单）
 ```
+
+**课程 HTML 生成规则**：
+- **必须先完成 Step 0 颜色提取**再生成课程 HTML
+- HTML 中的项目专属 CSS 变量用项目名缩写做前缀（如 `--lumi-rose`、`--myapp-blue`），而非 `--project-*`
+- 引用共享样式表：`<link rel="stylesheet" href="../../assets/lesson-styles.css">`
+- 引用测验组件：`<link rel="stylesheet" href="../../assets/quiz.css">` + `<script src="../../assets/quiz.js"></script>`
+- 禁止在课程 HTML 中写 Lumi 专属色值（`#c8607a`、`#FDF8F4` 等）
 
 ---
 
