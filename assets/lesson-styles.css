@@ -1,0 +1,69 @@
+/* ═══════════════ PLS Lesson Shared Stylesheet ═══════════════ */
+/*  All lesson HTML files link to this stylesheet to ensure    */
+/*  a consistent, beautiful course appearance.                 */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --lesson-ink:#4a3038;--lesson-ink-muted:#8a6a70;--lesson-ink-subtle:#b0989e;
+  --lesson-bg:#FDF8F4;--lesson-card:#fffbf9;--lesson-accent:#c8607a;
+  --lesson-radius:18px;--lesson-shadow:0 2px 12px rgba(200,96,122,0.08);
+}
+
+body{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
+  background:linear-gradient(160deg,#FDF8F4 0%,#F8EEF4 18%,#EEE8F4 36%,#F4EEE4 54%,#EEF4F0 72%,#F8F4F8 88%,#FDF4EE 100%);
+  color:var(--lesson-ink);min-height:100vh;line-height:1.7;
+  font-size:17px;font-weight:500;letter-spacing:0.01em;
+  -webkit-font-smoothing:antialiased;max-width:800px;margin:0 auto;padding:40px 24px 80px;
+}
+
+/* Headings */
+h1{font-size:36px;font-weight:800;letter-spacing:0.03em;margin:24px 0 12px;color:var(--lesson-ink)}
+h2{font-size:24px;font-weight:700;letter-spacing:0.02em;margin:32px 0 12px;color:var(--lesson-ink)}
+h3{font-size:20px;font-weight:700;margin:24px 0 8px;color:var(--lesson-ink)}
+p{margin:8px 0;color:var(--lesson-ink)}
+
+/* Cards & Sections */
+.lesson-section{
+  background:var(--lesson-card);border-radius:var(--lesson-radius);
+  padding:28px;margin:20px 0;box-shadow:var(--lesson-shadow);
+}
+.lesson-section h3{margin-top:0}
+
+/* Code blocks */
+pre,code{font-family:'SF Mono','Cascadia Code','Fira Code',monospace;font-size:14px}
+pre{background:#2d2a2e;color:#e8d5e0;border-radius:12px;padding:20px;overflow-x:auto;line-height:1.6;margin:16px 0}
+code{background:rgba(200,96,122,0.08);padding:2px 6px;border-radius:4px;font-size:14px}
+pre code{background:none;padding:0}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid rgba(200,96,122,0.1)}
+th{font-weight:700;color:var(--lesson-accent)}
+
+/* Blockquotes */
+blockquote{
+  border-left:3px solid var(--lesson-accent);padding:12px 20px;margin:16px 0;
+  background:rgba(200,96,122,0.04);border-radius:0 12px 12px 0;color:var(--lesson-ink-muted);
+}
+
+/* Step divider */
+.lesson-divider{
+  border:none;border-top:2px dashed rgba(200,96,122,0.15);margin:32px 0;
+}
+
+/* Tags/Badges */
+.lesson-tag{
+  display:inline-block;padding:4px 14px;border-radius:9999px;
+  font-size:13px;font-weight:600;background:rgba(200,96,122,0.1);color:var(--lesson-accent);
+}
+
+@media(max-width:640px){
+  body{padding:20px 16px 60px;font-size:16px}
+  h1{font-size:28px}h2{font-size:20px}.lesson-section{padding:20px}
+}

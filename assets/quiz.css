@@ -1,0 +1,52 @@
+/* ═══════════════ PLS Quiz Component Styles ═══════════════ */
+.quiz-container{
+  background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,0.5);border-radius:18px;
+  padding:32px;margin:32px 0;box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.quiz-container h3{
+  font-family:'Nunito','Quicksand',sans-serif;font-size:21px;font-weight:700;
+  margin-bottom:24px;letter-spacing:0.02em;
+}
+.quiz-question{
+  background:rgba(0,0,0,0.02);border-radius:12px;
+  padding:20px;margin-bottom:16px;
+}
+.quiz-question p{
+  font-size:16px;font-weight:600;margin-bottom:12px;color:var(--ink,#333);
+}
+.quiz-question label{
+  display:block;padding:10px 16px;margin:4px 0;
+  border-radius:8px;cursor:pointer;transition:background 0.15s;
+  font-size:15px;color:var(--ink,#333);
+}
+.quiz-question label:hover{background:rgba(200,96,122,0.06)}
+.quiz-question input[type="radio"]{margin-right:10px;accent-color:var(--accent,#c8607a)}
+.quiz-question.correct{border-left:4px solid #30b46e;background:rgba(48,180,110,0.06)}
+.quiz-question.incorrect{border-left:4px solid #e04040;background:rgba(224,64,64,0.06)}
+.quiz-feedback{
+  margin-top:10px;padding:10px 14px;border-radius:8px;
+  font-size:14px;line-height:1.5;display:none;
+}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct-fb{background:rgba(48,180,110,0.08);color:#1a6b3c}
+.quiz-feedback.incorrect-fb{background:rgba(224,64,64,0.08);color:#8b2020}
+.quiz-btn{
+  display:inline-block;padding:12px 28px;border:none;border-radius:9999px;
+  background:var(--accent,#c8607a);color:#fff;font-size:16px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;margin-top:8px;
+}
+.quiz-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(200,96,122,0.3)}
+.quiz-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.quiz-score{
+  margin-top:16px;padding:16px;border-radius:12px;
+  text-align:center;font-size:18px;font-weight:700;
+}
+.quiz-score.perfect{background:rgba(48,180,110,0.1);color:#1a6b3c}
+.quiz-score.good{background:rgba(200,160,112,0.12);color:#7a5a30}
+.quiz-score.retry{background:rgba(200,96,122,0.1);color:#8b3030}
+@media(max-width:640px){
+  .quiz-container{padding:20px;margin:24px 0}
+  .quiz-question{padding:14px}
+}

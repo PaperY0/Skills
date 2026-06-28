@@ -1,0 +1,524 @@
+<!--
+  PLS Project Visualization Template — Apple-inspired glassmorphism design.
+  ALL placeholder markers and JS logic preserved. Only visual design changed.
+  To use: search for __PLACEHOLDER__ markers and replace with project data.
+  The getAnalogy/getConsequence/getWhen functions MUST be customized per project.
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__PROJECT_TITLE__ — 项目架构全景图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ Reset & Design Tokens ═══════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* 🎨 Palette defaults — customize per project:
+     Read App.tsx / globals.css body background → set on body{}
+     Read primary accent → --accent, --accent-glass, --shadow-*
+     Read secondary accent → --accent2 */
+  --ink:#4a3038;--ink-muted:#8a6a70;--ink-subtle:#b0989e;
+  --canvas:#fffbf9;--canvas-parchment:#faf5f2;
+  --accent:#c8607a;--accent-glass:rgba(200,96,122,0.10);--accent2:#b0a0cc;
+  --divider:rgba(200,96,122,0.08);--hairline:rgba(200,96,122,0.12);
+  /* Glass tokens */
+  --glass-bg:rgba(255,251,249,0.78);--glass-bg-strong:rgba(255,248,245,0.92);
+  --glass-border:rgba(255,255,255,0.5);--glass-blur:24px;
+  /* Shadows — warm */
+  --shadow-product:0 4px 24px rgba(200,96,122,0.10);
+  --shadow-card:0 1px 3px rgba(200,96,122,0.05),0 0 0 1px rgba(200,96,122,0.04);
+  --shadow-elevated:0 8px 40px rgba(200,96,122,0.16);
+  /* Radius scale */
+  --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:24px;--r-pill:9999px;
+  /* File type colors */
+  --file-ts:#3178c6;--file-tsx:#61dafb;--file-css:#38bdf8;
+  --file-json:#f59e0b;--file-md:#8b5cf6;--file-env:#10b981;--file-other:#94a3b8;
+  --folder:#e8a888;
+  /* Layer border colors */
+  --layer-types:#f59e0b;--layer-db:#3b82f6;--layer-store:#ec4899;
+  --layer-hooks:#10b981;--layer-pages:#8b5cf6;--layer-server:#ef4444;
+}
+body{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
+  /* ⚠️ MUST be replaced with project's actual background gradient */
+  background:linear-gradient(160deg,#FDF8F4 0%,#F8EEF4 18%,#EEE8F4 36%,#F4EEE4 54%,#EEF4F0 72%,#F8F4F8 88%,#FDF4EE 100%);
+  color:var(--ink);min-height:100vh;line-height:1.55;
+  font-size:17px;font-weight:500;letter-spacing:0.01em;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+
+/* ═══════════════ Layout ═══════════════ */
+.app{max-width:1200px;margin:0 auto;padding:0 24px 80px}
+
+/* ═══════════════ Frosted Header ═══════════════ */
+.header{
+  position:sticky;top:0;z-index:50;
+  background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  border-bottom:1px solid var(--divider);
+  padding:20px 24px;margin:0 -24px 40px;
+  text-align:center;
+}
+.header h1{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
+  font-size:42px;font-weight:800;line-height:1.2;letter-spacing:0.03em;
+  color:var(--ink);margin-bottom:6px;
+}
+.header p{
+  font-size:17px;font-weight:400;color:var(--ink-muted);
+  max-width:500px;margin:0 auto;line-height:1.47;
+}
+
+/* ═══════════════ Stats Bar ═══════════════ */
+.stats-bar{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;
+}
+.stat{
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);padding:20px 28px;text-align:center;min-width:90px;
+  box-shadow:var(--shadow-card);
+  transition:transform 0.25s cubic-bezier(0.25,0.1,0.25,1),box-shadow 0.25s ease;
+  animation:cardSlideUp 0.6s cubic-bezier(0.25,0.1,0.25,1) both;
+}
+.stat:nth-child(1){animation-delay:0.05s}
+.stat:nth-child(2){animation-delay:0.1s}
+.stat:nth-child(3){animation-delay:0.15s}
+.stat:nth-child(4){animation-delay:0.2s}
+.stat:nth-child(5){animation-delay:0.25s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(160,100,115,0.10)}
+.stat .num{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC',sans-serif;
+  font-size:34px;font-weight:700;line-height:1.1;color:var(--ink);
+  letter-spacing:0.02em;
+}
+.stat .label{font-size:12px;font-weight:400;color:var(--ink-muted);margin-top:4px;letter-spacing:0}
+
+/* ═══════════════ Frosted Tabs ═══════════════ */
+.tabs{
+  display:flex;gap:2px;justify-content:center;margin-bottom:32px;flex-wrap:wrap;
+  background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  border:1px solid var(--glass-border);border-radius:var(--r-pill);
+  padding:4px;box-shadow:var(--shadow-card);
+  max-width:620px;margin-left:auto;margin-right:auto;
+}
+.tab{
+  padding:10px 22px;border-radius:var(--r-pill);cursor:pointer;
+  font-size:14px;font-weight:500;color:var(--ink-muted);
+  transition:all 0.2s cubic-bezier(0.25,0.1,0.25,1);
+  border:none;background:none;letter-spacing:0.02em;
+}
+.tab:hover{color:var(--ink);background:rgba(160,100,115,0.06)}
+.tab.active{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(200,96,122,0.25)}
+.panel{display:none}
+.panel.active{display:block;animation:fadeSlideIn 0.4s cubic-bezier(0.25,0.1,0.25,1)}
+
+/* ═══════════════ Glass Card Containers ═══════════════ */
+.tree,.flow-section,.tech-card,.layer{
+  background:var(--canvas);
+  border:1px solid var(--hairline);
+  border-radius:var(--r-xl);
+  box-shadow:var(--shadow-card);
+  animation:cardSlideUp 0.5s cubic-bezier(0.25,0.1,0.25,1) both;
+}
+
+/* ═══════════════ Tree View ═══════════════ */
+.tree{
+  padding:24px 28px;max-height:75vh;overflow-y:auto;
+  font-family:'SF Mono','Cascadia Code','Fira Code','JetBrains Mono',monospace;
+  font-size:13px;letter-spacing:0;
+}
+.tree-node{
+  cursor:pointer;user-select:none;padding:4px 8px;border-radius:6px;
+  transition:background 0.15s ease;
+}
+.tree-node:hover{background:rgba(160,100,115,0.06)}
+.tree-node .icon{margin-right:8px;display:inline-block;width:18px;text-align:center;font-size:14px}
+.tree-node .name{font-weight:500}
+.tree-node .desc{color:var(--ink-subtle);margin-left:10px;font-size:12px;font-weight:400}
+.tree-children{padding-left:24px;border-left:1px solid var(--divider);margin-left:9px}
+.tree-children.collapsed{display:none}
+.tree-toggle{display:inline-block;width:16px;color:var(--accent);font-weight:700;cursor:pointer;font-size:10px}
+.folder-icon{color:var(--folder)}
+.file-icon.ts{color:var(--file-ts)}.file-icon.tsx{color:var(--file-tsx)}
+.file-icon.css{color:var(--file-css)}.file-icon.json{color:var(--file-json)}
+.file-icon.md{color:var(--file-md)}.file-icon.env{color:var(--file-env)}
+.file-icon.other{color:var(--file-other)}
+
+/* ═══════════════ Search Input ═══════════════ */
+.search-box{
+  width:100%;padding:13px 20px;border:1px solid var(--hairline);
+  border-radius:var(--r-pill);font-size:15px;margin-bottom:20px;
+  background:var(--canvas-parchment);color:var(--ink);outline:none;
+  transition:all 0.2s ease;font-family:inherit;letter-spacing:0.02em;
+}
+.search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glass);background:var(--canvas)}
+.search-box::placeholder{color:var(--ink-subtle)}
+
+/* ═══════════════ Data Flow ═══════════════ */
+.flow-container{display:flex;flex-direction:column;gap:20px}
+.flow-section{padding:32px}
+.flow-section h3{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC',sans-serif;
+  font-size:21px;font-weight:700;margin-bottom:24px;color:var(--ink);
+  display:flex;align-items:center;gap:10px;letter-spacing:0.02em;
+}
+.flow-diagram{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;padding:16px 0}
+.flow-box{
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);padding:16px 24px;text-align:center;
+  min-width:120px;font-weight:700;font-size:14px;
+  transition:transform 0.2s cubic-bezier(0.25,0.1,0.25,1),box-shadow 0.2s ease;
+  letter-spacing:0.02em;
+}
+.flow-box:hover{transform:translateY(-2px);box-shadow:var(--shadow-product)}
+.flow-box.start{background:var(--accent);color:#fff;border-color:var(--accent)}
+.flow-box.end{background:var(--canvas-parchment);border-color:var(--divider);font-weight:500}
+.flow-box.ai{background:rgba(176,160,204,0.12);border-color:rgba(176,160,204,0.3);color:var(--accent2)}
+.flow-arrow{font-size:1.2rem;color:var(--ink-subtle);font-weight:400}
+.flow-arrow.down{display:block;text-align:center;margin:6px 0;font-size:1rem}
+
+/* ═══════════════ Tech Stack Grid ═══════════════ */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.tech-card{
+  padding:28px;cursor:default;
+  transition:transform 0.3s cubic-bezier(0.25,0.1,0.25,1),box-shadow 0.3s ease;
+}
+.tech-card:nth-child(1){animation-delay:0.05s}
+.tech-card:nth-child(2){animation-delay:0.1s}
+.tech-card:nth-child(3){animation-delay:0.15s}
+.tech-card:nth-child(4){animation-delay:0.2s}
+.tech-card:nth-child(5){animation-delay:0.25s}
+.tech-card:nth-child(6){animation-delay:0.3s}
+.tech-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-elevated)}
+.tech-card .tech-name{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC',sans-serif;
+  font-size:17px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px;
+}
+.tech-card .tech-role{font-size:14px;color:var(--ink);font-weight:500;margin-bottom:8px}
+.tech-card .tech-analogy{font-size:14px;color:var(--ink-muted);margin-bottom:4px}
+.tech-card .tech-why{font-size:13px;color:var(--accent);font-weight:500}
+.tech-badge{
+  display:inline-block;padding:4px 12px;border-radius:var(--r-pill);
+  font-size:11px;font-weight:700;letter-spacing:0;
+  text-transform:uppercase;
+}
+.badge-frontend{background:rgba(200,96,122,0.1);color:#a04060}
+.badge-backend{background:rgba(176,160,204,0.15);color:#6b5b8a}
+.badge-database{background:rgba(128,192,168,0.15);color:#3d6b5a}
+.badge-tooling{background:rgba(196,160,112,0.15);color:#8a6d40}
+.badge-ai{background:rgba(200,160,200,0.15);color:#7a5080}
+.badge-validation{background:rgba(200,96,122,0.1);color:#a04060}
+
+/* ═══════════════ Architecture Layers ═══════════════ */
+.layers{display:flex;flex-direction:column;gap:14px}
+.layer{
+  padding:28px 32px;border-left:3px solid transparent;
+  cursor:pointer;transition:all 0.25s cubic-bezier(0.25,0.1,0.25,1);
+}
+.layer:nth-child(1){animation-delay:0.05s}
+.layer:nth-child(2){animation-delay:0.15s}
+.layer:nth-child(3){animation-delay:0.2s}
+.layer:nth-child(4){animation-delay:0.25s}
+.layer:nth-child(5){animation-delay:0.3s}
+.layer:nth-child(6){animation-delay:0.35s}
+.layer:hover{transform:translateX(6px);box-shadow:var(--shadow-product)}
+.layer h3{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC',sans-serif;
+  font-size:17px;font-weight:700;margin-bottom:6px;letter-spacing:0.02em;
+}
+.layer .layer-desc{color:var(--ink-muted);font-size:14px;margin-bottom:10px;line-height:1.5}
+.layer .layer-files{display:flex;flex-wrap:wrap;gap:6px}
+.layer .file-tag{
+  background:rgba(160,100,115,0.06);border-radius:var(--r-pill);
+  padding:4px 14px;font-size:12px;color:var(--ink-muted);
+  font-family:'SF Mono',monospace;letter-spacing:0;
+}
+.layer.l-types{border-left-color:var(--layer-types)}
+.layer.l-db{border-left-color:var(--layer-db)}
+.layer.l-store{border-left-color:var(--layer-store)}
+.layer.l-hooks{border-left-color:var(--layer-hooks)}
+.layer.l-pages{border-left-color:var(--layer-pages)}
+.layer.l-server{border-left-color:var(--layer-server)}
+
+/* ═══════════════ Routes ═══════════════ */
+.routes-diagram{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;padding:24px}
+.route-node{
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);padding:14px 22px;font-size:14px;font-weight:500;
+  text-align:center;transition:all 0.2s ease;
+}
+.route-node:hover{border-color:var(--accent);background:var(--accent-glass)}
+.route-node.root{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+
+/* ═══════════════ Modal ═══════════════ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:100;align-items:center;justify-content:center;
+}
+.modal-overlay.show{display:flex;animation:fadeIn 0.2s ease}
+.modal{
+  background:var(--canvas);border-radius:var(--r-xl);
+  max-width:640px;width:90%;max-height:80vh;overflow-y:auto;
+  padding:36px;box-shadow:var(--shadow-elevated);position:relative;
+  animation:modalSlideUp 0.35s cubic-bezier(0.25,0.1,0.25,1);
+}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:var(--r-pill);
+  background:rgba(160,100,115,0.06);border:none;font-size:1.1rem;cursor:pointer;
+  color:var(--ink-muted);display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s ease;
+}
+.modal-close:hover{background:rgba(160,100,115,0.10);color:var(--ink)}
+.modal h2{
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC',sans-serif;
+  font-size:24px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px;
+  letter-spacing:0.02em;
+}
+.modal .file-path{color:var(--accent);font-family:'SF Mono',monospace;font-size:13px;margin-bottom:20px}
+.modal .file-summary{font-size:17px;color:var(--ink-muted);margin-bottom:20px;line-height:1.5}
+.modal .file-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.modal .meta-item{
+  background:rgba(160,100,115,0.06);padding:6px 16px;border-radius:var(--r-pill);
+  font-size:13px;color:var(--ink-muted);
+}
+
+/* ═══════════════ Animations ═══════════════ */
+@keyframes cardSlideUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeSlideIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes modalSlideUp{
+  from{opacity:0;transform:translateY(32px) scale(0.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* ═══════════════ Scrollbar ═══════════════ */
+.tree::-webkit-scrollbar{width:6px}
+.tree::-webkit-scrollbar-track{background:transparent}
+.tree::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:3px}
+.tree::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.2)}
+
+/* ═══════════════ Responsive ═══════════════ */
+@media(max-width:834px){
+  .app{padding:0 16px 60px}
+  .header{margin:0 -16px 32px;padding:16px}
+  .header h1{font-size:28px}
+  .tabs{max-width:100%;border-radius:var(--r-lg);gap:0}
+  .tab{padding:8px 14px;font-size:13px}
+  .flow-diagram{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg)}
+  .tech-grid{grid-template-columns:1fr}
+  .stats-bar{gap:8px}
+  .stat{padding:14px 20px;min-width:70px}
+  .stat .num{font-size:24px}
+  .flow-section{padding:24px}
+  .layer{padding:20px 24px}
+}
+@media(max-width:640px){
+  .header h1{font-size:24px}
+  .tab{font-size:12px;padding:6px 12px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <h1>__PROJECT_TITLE__</h1>
+    <p>__PROJECT_TAGLINE__</p>
+  </div>
+  <div class="stats-bar">__STATS__</div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('tree')">🌳 文件树</button>
+    <button class="tab" onclick="switchTab('flow')">🔄 数据流</button>
+    <button class="tab" onclick="switchTab('layers')">🏗️ 架构分层</button>
+    <button class="tab" onclick="switchTab('tech')">🛠️ 技术栈</button>
+    <button class="tab" onclick="switchTab('routes')">🧭 页面导航</button>
+  </div>
+  <div id="panel-tree" class="panel active">
+    <input type="text" class="search-box" placeholder="🔍 搜索文件名或功能描述…" oninput="filterTree(this.value)">
+    <div class="tree" id="tree-container"></div>
+  </div>
+  <div id="panel-flow" class="panel">
+    <div class="flow-container">__FLOW_SECTIONS__</div>
+  </div>
+  <div id="panel-layers" class="panel">
+    <div class="layers">__LAYERS_DATA__</div>
+  </div>
+  <div id="panel-tech" class="panel">
+    <div class="tech-grid" id="tech-grid"></div>
+  </div>
+  <div id="panel-routes" class="panel">
+    __ROUTES_DATA__
+  </div>
+</div>
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+/* ═══════════════ PROJECT DATA ═══════════════ */
+/* FILE_TREE nodes MUST include: name, type, ext?, desc, analogy, consequence, when */
+/* Example: {name:'database.ts',type:'file',ext:'ts',desc:'建表+索引定义',
+             analogy:'就像仓库平面图——画好货架编号',
+             consequence:'数据库不存在，刷新就丢、关闭就没',
+             when:'要加新表时'} */
+const FILE_TREE = __FILE_TREE_DATA__;
+const TECH_STACK = __TECH_STACK_DATA__;
+
+/* ═══════════════ Tab Switching ═══════════════ */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector(`.tab[onclick*="${name}"]`).classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='tech'&&!document.getElementById('tech-grid').innerHTML)renderTech();
+}
+
+/* ═══════════════ Tree Rendering ═══════════════ */
+function renderTree(nodes,container){
+  for(const node of nodes){
+    const div=document.createElement('div');
+    div.className='tree-node';
+    div.setAttribute('data-name',node.name.toLowerCase());
+    div.setAttribute('data-desc',(node.desc||'').toLowerCase());
+    div.onclick=function(e){e.stopPropagation();openFileDetail(node)};
+    let html='';
+    if(node.type==='folder'){
+      const hasKids=node.children&&node.children.length>0;
+      html+=`<span class="tree-toggle">${hasKids?'▶':''}</span>`;
+      html+=`<span class="icon folder-icon">📁</span>`;
+      html+=`<span class="name" style="font-weight:700;color:var(--folder)">${node.name}/</span>`;
+    } else {
+      html+=`<span style="display:inline-block;width:16px"></span>`;
+      const ext=node.ext||'other';
+      const icons={tsx:'⚛️',ts:'🔷',css:'🎨',json:'📋',env:'🔑',md:'📝'};
+      html+=`<span class="icon file-icon ${ext}">${icons[ext]||'📄'}</span>`;
+      html+=`<span class="name">${node.name}</span>`;
+    }
+    html+=`<span class="desc">${node.desc||''}</span>`;
+    div.innerHTML=html;
+    container.appendChild(div);
+    if(node.children&&node.children.length>0){
+      const cc=document.createElement('div');
+      cc.className='tree-children collapsed';
+      container.appendChild(cc);
+      div.querySelector('.tree-toggle').onclick=function(e){
+        e.stopPropagation();cc.classList.toggle('collapsed');
+        this.textContent=cc.classList.contains('collapsed')?'▶':'▼';
+      };
+      renderTree(node.children,cc);
+    }
+  }
+}
+renderTree(FILE_TREE,document.getElementById('tree-container'));
+
+/* ═══════════════ Search ═══════════════ */
+function filterTree(query){
+  const nodes=document.querySelectorAll('#tree-container .tree-node');
+  const q=query.toLowerCase().trim();
+  nodes.forEach(n=>{
+    if(!q){n.style.display='';return}
+    const name=n.getAttribute('data-name')||'';
+    const desc=n.getAttribute('data-desc')||'';
+    if(name.includes(q)||desc.includes(q)){
+      n.style.display='';
+      let p=n.parentElement;
+      while(p&&p.id!=='tree-container'){
+        if(p.classList.contains('tree-children')){p.classList.remove('collapsed');
+          const t=p.previousElementSibling?.querySelector?.('.tree-toggle');
+          if(t)t.textContent='▼';}
+        p=p.parentElement;
+      }
+    } else {n.style.display='none';}
+  });
+}
+
+/* ═══════════════ Tech Stack ═══════════════ */
+function renderTech(){
+  document.getElementById('tech-grid').innerHTML=TECH_STACK.map(t=>`
+    <div class="tech-card">
+      <div class="tech-name">${t.name} <span class="tech-badge badge-${t.badge}">${t.badge}</span></div>
+      <div class="tech-role">📌 在项目里：${t.role}</div>
+      <div class="tech-analogy">🧸 类比：${t.analogy}</div>
+      <div class="tech-why">💡 为什么选它：${t.why}</div>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════ File Detail Modal ═══════════════ */
+function openFileDetail(node){
+  const m=document.getElementById('modal');
+  const c=document.getElementById('modal-content');
+  const isFolder=node.type==='folder';
+  const extIcons={tsx:'⚛️',ts:'🔷',css:'🎨',json:'📋',env:'🔑',md:'📝'};
+  const icon=isFolder?'📁':(extIcons[node.ext]||'📄');
+  c.innerHTML=`
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>${icon} ${node.name}${isFolder?'/':''}</h2>
+    <div class="file-path">${isFolder?'文件夹':'文件'}</div>
+    <div class="file-summary">${node.desc||'（暂无详细说明）'}</div>
+    ${isFolder?`
+      <div style="margin-top:16px">
+        <strong style="color:var(--ink);font-weight:700;font-size:14px">📦 包含 ${node.children?node.children.length:0} 个子项：</strong>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+          ${(node.children||[]).map(c=>`<span class="file-tag">${c.type==='folder'?'📁':''} ${c.name}</span>`).join('')}
+        </div>
+      </div>
+    `:`
+      <div class="file-meta">
+        <span class="meta-item">📝 类型：${(node.ext||'other').toUpperCase()}</span>
+        <span class="meta-item">📂 属于：__PROJECT_NAME__</span>
+      </div>
+      <div style="margin-top:20px;padding:20px;background:var(--canvas-parchment);border-radius:var(--r-lg);font-size:15px;color:var(--ink-muted);line-height:1.6">
+        <strong style="color:var(--ink);display:block;margin-bottom:4px">💡 生活类比</strong>${getAnalogy(node)}
+        <strong style="color:var(--ink);display:block;margin:16px 0 4px">⚠️ 如果改这个文件</strong>${getConsequence(node)}
+        <strong style="color:var(--ink);display:block;margin:16px 0 4px">✅ 什么时候改它</strong>${getWhen(node)}
+      </div>
+    `}
+  `;
+  m.classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+
+/* ═══════════════ Read from node fields (NO keyword matching) ═══════════════ */
+function getAnalogy(node){return node.analogy||'暂无类比信息'}
+function getConsequence(node){return node.consequence||'暂无后果分析'}
+function getWhen(node){return node.when||'暂无修改指引'}
+
+/* ═══════════════ Layer → Tree Jump ═══════════════ */
+const LAYER_MAP = __LAYER_MAP__;
+function highlightFiles(layer){
+  switchTab('tree');
+  setTimeout(()=>{const q=LAYER_MAP[layer]||'';if(q)filterTree(q);},200);
+}
+
+/* ═══════════════ Keyboard ═══════════════ */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+  if(e.ctrlKey||e.metaKey){
+    ['tree','flow','layers','tech','routes'].forEach((t,i)=>{
+      if(e.key===String(i+1)){e.preventDefault();switchTab(t);}
+    });
+  }
+});
+console.log('📦 项目架构全景图已就绪 — Ctrl+1~5 切换 Tab | 搜索框过滤 | 点击文件看详情');
+</script>
+</body>
+</html>
