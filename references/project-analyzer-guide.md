@@ -57,6 +57,10 @@ AI：<AI服务> (⭐⭐⭐⭐⭐)
 类型：TypeScript (⭐⭐⭐⭐⭐)
 ```
 
+### Step 5：生成能力树
+
+根据项目画像 + `references/ability-tree-guide.md` 的映射规则，生成 `<学习文件夹>/ABILITY-TREE.md`。
+
 ---
 
 ## 动态课程生成规则
