@@ -28,9 +28,9 @@
   --glass-bg:__PROJECT_GLASS_BG__;--glass-bg-strong:__PROJECT_GLASS_BG_STRONG__;
   --glass-border:rgba(255,255,255,0.5);--glass-blur:24px;
   /* Shadows — neutral defaults, tinted per accent after color extraction */
-  --shadow-product:0 4px 24px rgba(0,0,0,0.08);
-  --shadow-card:0 1px 3px rgba(0,0,0,0.04),0 0 0 1px rgba(0,0,0,0.03);
-  --shadow-elevated:0 8px 40px rgba(0,0,0,0.12);
+  --shadow-product:0 4px 24px rgba(74,48,56,0.10);
+  --shadow-card:0 1px 3px rgba(74,48,56,0.05),0 0 0 1px rgba(74,48,56,0.04);
+  --shadow-elevated:0 8px 40px rgba(74,48,56,0.14);
   /* Radius scale */
   --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:24px;--r-pill:9999px;
   /* File type colors */
@@ -98,15 +98,15 @@ body{
 
 /* ═══════════════ Frosted Tabs ═══════════════ */
 .tabs{
-  display:flex;gap:2px;justify-content:center;margin-bottom:32px;flex-wrap:wrap;
+  display:flex;gap:2px;justify-content:center;margin-bottom:32px;flex-wrap:nowrap;
   background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur)) saturate(180%);
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(180%);
   border:1px solid var(--glass-border);border-radius:var(--r-pill);
   padding:4px;box-shadow:var(--shadow-card);
-  max-width:620px;margin-left:auto;margin-right:auto;
+  max-width:760px;margin-left:auto;margin-right:auto;
 }
 .tab{
-  padding:10px 22px;border-radius:var(--r-pill);cursor:pointer;
+  padding:10px 16px;border-radius:var(--r-pill);cursor:pointer;
   font-size:14px;font-weight:500;color:var(--ink-muted);
   transition:all 0.2s cubic-bezier(0.25,0.1,0.25,1);
   border:none;background:none;letter-spacing:0.02em;
@@ -257,7 +257,7 @@ body{
 /* ═══════════════ Modal ═══════════════ */
 .modal-overlay{
   display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);
+  background:rgba(74,48,56,0.32);backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
   z-index:100;align-items:center;justify-content:center;
 }
@@ -289,6 +289,71 @@ body{
   font-size:13px;color:var(--ink-muted);
 }
 
+/* ═══════════════ Ability Tree ═══════════════ */
+.ability-tree-container{padding:24px 28px}
+.ability-category{
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);padding:24px 28px;margin-bottom:20px;
+  box-shadow:var(--shadow-card);
+  animation:cardSlideUp 0.5s cubic-bezier(0.25,0.1,0.25,1) both;
+}
+.ability-category:nth-child(1){animation-delay:0.05s}
+.ability-category:nth-child(2){animation-delay:0.1s}
+.ability-category:nth-child(3){animation-delay:0.15s}
+.ability-category:nth-child(4){animation-delay:0.2s}
+.ability-category:nth-child(5){animation-delay:0.25s}
+.ability-category:nth-child(6){animation-delay:0.3s}
+.ability-category:nth-child(7){animation-delay:0.35s}
+.ability-category:nth-child(8){animation-delay:0.4s}
+.ability-cat-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;flex-wrap:wrap;gap:8px;
+}
+.ability-cat-name{
+  font-size:17px;font-weight:700;color:var(--ink);
+  letter-spacing:0.02em;
+}
+.ability-cat-stars{font-size:13px;color:var(--ink-muted);font-weight:500}
+.ability-cat-badge{
+  display:inline-block;padding:4px 14px;border-radius:var(--r-pill);
+  font-size:11px;font-weight:700;letter-spacing:0.04em;
+  background:rgba(128,192,168,0.12);color:#3d6b5a;
+}
+.ability-item{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;
+  border-radius:var(--r-md);transition:background 0.15s ease;
+  margin-bottom:2px;
+}
+.ability-item:hover{background:rgba(160,100,115,0.04)}
+.ability-checkbox{
+  width:20px;height:20px;border-radius:6px;flex-shrink:0;
+  border:2px solid var(--divider);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s ease;font-size:12px;color:transparent;
+}
+.ability-checkbox.checked{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+.ability-label{
+  flex:1;font-size:14px;color:var(--ink-muted);
+  transition:color 0.2s ease;
+}
+.ability-label.done{color:var(--ink-subtle);text-decoration:line-through}
+.ability-progress{
+  display:flex;align-items:center;gap:6px;
+  font-family:'SF Mono',monospace;font-size:11px;color:var(--ink-subtle);
+  flex-shrink:0;
+}
+.ability-bar{
+  width:80px;height:6px;border-radius:3px;
+  background:rgba(74,48,56,0.06);overflow:hidden;
+}
+.ability-bar-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent),rgba(200,96,122,0.6));
+  transition:width 0.4s cubic-bezier(0.25,0.1,0.25,1);
+}
+
 /* ═══════════════ Animations ═══════════════ */
 @keyframes cardSlideUp{
   from{opacity:0;transform:translateY(24px)}
@@ -310,16 +375,16 @@ body{
 /* ═══════════════ Scrollbar ═══════════════ */
 .tree::-webkit-scrollbar{width:6px}
 .tree::-webkit-scrollbar-track{background:transparent}
-.tree::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:3px}
-.tree::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.2)}
+.tree::-webkit-scrollbar-thumb{background:rgba(74,48,56,0.14);border-radius:3px}
+.tree::-webkit-scrollbar-thumb:hover{background:rgba(74,48,56,0.22)}
 
 /* ═══════════════ Responsive ═══════════════ */
 @media(max-width:834px){
   .app{padding:0 16px 60px}
   .header{margin:0 -16px 32px;padding:16px}
   .header h1{font-size:28px}
-  .tabs{max-width:100%;border-radius:var(--r-lg);gap:0}
-  .tab{padding:8px 14px;font-size:13px}
+  .tabs{max-width:100%;border-radius:var(--r-lg);gap:4px;overflow-x:auto}
+  .tab{padding:8px 10px;font-size:12px}
   .flow-diagram{flex-direction:column}
   .flow-arrow{transform:rotate(90deg)}
   .tech-grid{grid-template-columns:1fr}
@@ -349,6 +414,7 @@ body{
     <button class="tab" onclick="switchTab('layers')">🏗️ 架构分层</button>
     <button class="tab" onclick="switchTab('tech')">🛠️ 技术栈</button>
     <button class="tab" onclick="switchTab('routes')">🧭 页面导航</button>
+    <button class="tab" onclick="switchTab('ability')">🌳 能力树</button>
   </div>
   <div id="panel-tree" class="panel active">
     <input type="text" class="search-box" placeholder="🔍 搜索文件名或功能描述…" oninput="filterTree(this.value)">
@@ -366,6 +432,9 @@ body{
   <div id="panel-routes" class="panel">
     __ROUTES_DATA__
   </div>
+  <div id="panel-ability" class="panel">
+    <div class="ability-tree-container" id="ability-tree-container"></div>
+  </div>
 </div>
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modal-content"></div>
@@ -380,6 +449,7 @@ body{
              when:'要加新表时'} */
 const FILE_TREE = __FILE_TREE_DATA__;
 const TECH_STACK = __TECH_STACK_DATA__;
+const ABILITY_TREE = __ABILITY_TREE_DATA__;
 
 /* ═══════════════ Tab Switching ═══════════════ */
 function switchTab(name){
@@ -388,6 +458,7 @@ function switchTab(name){
   document.querySelector(`.tab[onclick*="${name}"]`).classList.add('active');
   document.getElementById('panel-'+name).classList.add('active');
   if(name==='tech'&&!document.getElementById('tech-grid').innerHTML)renderTech();
+  if(name==='ability'&&!document.getElementById('ability-tree-container').innerHTML)renderAbilityTree();
 }
 
 /* ═══════════════ Tree Rendering ═══════════════ */
@@ -459,6 +530,53 @@ function renderTech(){
       <div class="tech-why">💡 为什么选它：${t.why}</div>
     </div>
   `).join('');
+}
+
+/* ═══════════════ Ability Tree ═══════════════ */
+function renderAbilityTree(){
+  const container=document.getElementById('ability-tree-container');
+  const stored=JSON.parse(localStorage.getItem('pres_ability_progress')||'{}');
+  container.innerHTML=ABILITY_TREE.map((cat,ci)=>{
+    const total=cat.items.length;
+    const done=cat.items.filter(item=>stored[item.id]).length;
+    const pct=total?Math.round(done/total*100):0;
+    const badgeCls=pct===100?'ability-cat-badge':'';
+    const badgeTxt=pct===100?'✅ 已完成':`${done}/${total}`;
+    return `
+    <div class="ability-category">
+      <div class="ability-cat-header">
+        <span class="ability-cat-name">${cat.category}</span>
+        <span class="ability-cat-stars">${'⭐'.repeat(cat.stars||0)}</span>
+        <span class="${badgeCls}" style="${pct<100?'background:rgba(200,96,122,0.08);color:var(--accent)':''}">${badgeTxt}</span>
+      </div>
+      ${cat.items.map(item=>{
+        const checked=!!stored[item.id];
+        return `
+        <div class="ability-item">
+          <div class="ability-checkbox${checked?' checked':''}" onclick="toggleAbility('${item.id}',this)" title="点击标记完成/未完成">${checked?'✓':''}</div>
+          <span class="ability-label${checked?' done':''}">${item.label}</span>
+          <span class="ability-progress">
+            <span class="ability-bar"><span class="ability-bar-fill" style="width:${checked?100:item.progress||0}%"></span></span>
+            ${checked?100:item.progress||0}%
+          </span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+function toggleAbility(id,el){
+  const stored=JSON.parse(localStorage.getItem('pres_ability_progress')||'{}');
+  if(stored[id]){delete stored[id];el.classList.remove('checked');el.textContent='';
+    const row=el.parentElement;row.querySelector('.ability-label').classList.remove('done');
+    row.querySelector('.ability-bar-fill').style.width='0%';
+    row.querySelector('.ability-progress').childNodes[2].textContent='0%';
+  }else{stored[id]=true;el.classList.add('checked');el.textContent='✓';
+    const row=el.parentElement;row.querySelector('.ability-label').classList.add('done');
+    row.querySelector('.ability-bar-fill').style.width='100%';
+    row.querySelector('.ability-progress').childNodes[2].textContent='100%';
+  }
+  localStorage.setItem('pres_ability_progress',JSON.stringify(stored));
+  renderAbilityTree();
 }
 
 /* ═══════════════ File Detail Modal ═══════════════ */

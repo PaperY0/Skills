@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__LESSON_NUM__ · __ABILITY_NAME__ — PRES Ability Engine · __PROJECT_NAME__</title>
+<link rel="stylesheet" href="../../assets/lesson-styles.css">
+<link rel="stylesheet" href="../../assets/quiz.css">
+<style>
+  /* ═══════════════ PROJECT COLOR INJECTION ═══════════════ */
+  /* Step 0: replace values below with extracted project colors.
+     Detection priority: globals.css → tailwind.config.* →
+     App.tsx/jsx → App.vue → layout.tsx → styles.scss → main.dart
+     No styles found? Keep neutral warm defaults — they work everywhere. */
+  :root {
+    --project-ink: #3d2c33;
+    --project-ink-muted: #6b5560;
+    --project-ink-subtle: #9a8590;
+    --project-accent: #b07080;
+    --project-accent-soft: rgba(176,112,128,0.1);
+    --project-card: rgba(255,255,255,0.72);
+    --project-bg-gradient: linear-gradient(160deg, #faf7f5 0%, #f5f0f0 100%);
+  }
+  body { background-attachment: fixed; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ Hero ═══════════════ -->
+<div class="lesson-hero">
+  <div class="lesson-number">__LESSON_NUM__</div>
+  <h1>__ABILITY_NAME__</h1>
+  <p class="ability-tagline">__MISSION_TEXT__</p>
+  <div class="lesson-meta">
+    <span>⏱️ 预计 __DURATION__ 分钟</span>
+    <span>__TECH_CATEGORY__</span>
+    <span>⭐ 重要度：__IMPORTANCE__</span>
+  </div>
+</div>
+
+<!-- ═══════════════ STEP 1 · Mission ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">1</div>
+    <div class="step-label">Mission · 获得能力</div>
+  </div>
+  <div class="step-title">__STEP1_TITLE__</div>
+  <blockquote class="mission-quote">__STEP1_QUOTE__</blockquote>
+  __STEP1_BODY__
+</div>
+
+<!-- ═══════════════ STEP 2 · Problem ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">2</div>
+    <div class="step-label">Problem · 第一性原理</div>
+  </div>
+  <div class="step-title">__STEP2_TITLE__</div>
+  __STEP2_BODY__
+</div>
+
+<!-- ═══════════════ STEP 3 · Understand ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">3</div>
+    <div class="step-label">Understand · 建立脑模型</div>
+  </div>
+  <div class="step-title">__STEP3_TITLE__</div>
+  __STEP3_BODY__
+</div>
+
+<!-- ═══════════════ STEP 4 · Project ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">4</div>
+    <div class="step-label">Project · 项目定位</div>
+  </div>
+  <div class="step-title">__STEP4_TITLE__</div>
+  __STEP4_BODY__
+</div>
+
+<!-- ═══════════════ STEP 5 · Code ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">5</div>
+    <div class="step-label">Code · 代码认知 (占 50%)</div>
+  </div>
+  <div class="step-title">__STEP5_TITLE__</div>
+  __STEP5_BODY__
+</div>
+
+<!-- ═══════════════ STEP 6 · Think ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">6</div>
+    <div class="step-label">Think · 架构思维 ⭐</div>
+  </div>
+  <div class="step-title">__STEP6_TITLE__</div>
+  __STEP6_BODY__
+</div>
+
+<!-- ═══════════════ STEP 7 · Output ═══════════════ -->
+<div class="glass-card">
+  <div class="step-header">
+    <div class="step-num">7</div>
+    <div class="step-label">Output · 输出训练 ⭐最重要</div>
+  </div>
+  <div class="step-title">__STEP7_TITLE__</div>
+  __STEP7_BODY__
+</div>
+
+<!-- ═══════════════ Quiz ═══════════════ -->
+<div class="glass-card" data-quiz-id="__QUIZ_ID__">
+  <h2 style="font-size:24px;font-weight:800;color:var(--lesson-ink);margin:0 0 8px;">🧩 Quiz：检验你的理解</h2>
+  <p style="color:var(--lesson-ink-subtle);margin:0 0 24px;">共 5 题，涵盖本课所有核心概念。</p>
+  __QUIZ_QUESTIONS__
+  <button class="quiz-submit" onclick="checkQuiz('__QUIZ_ID__')" style="display:block;margin:24px auto 0;padding:14px 48px;border-radius:9999px;background:linear-gradient(135deg,#b07080,rgba(176,112,128,0.8));color:white;border:none;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.04em;">提交答案</button>
+  <div class="quiz-score" style="text-align:center;margin-top:20px;font-size:16px;font-weight:700;"></div>
+</div>
+
+<script src="../../assets/quiz.js"></script>
+
+<!-- ═══════════════ Footer ═══════════════ -->
+<div class="lesson-footer">
+  <p>__LESSON_NUM__ · PRES Ability Engine · __PROJECT_NAME__ Series</p>
+  <p>Ability: __ABILITY_NAME__</p>
+</div>
+
+</body>
+</html>

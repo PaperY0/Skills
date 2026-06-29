@@ -230,7 +230,33 @@ Repository
 
 ## 核心功能：项目可视化 + 代码阅读（双格式强制输出）
 
-Step 0 配色提取（强制）→ Step 1 侦察+计数 → Step 2-4 架构图+数据流+技术栈 → Step 5 双格式（MD+HTML）
+### Step 0：配色提取（强制，不可跳过）
+
+```
+① 多源检测（按优先级）：
+   globals.css / index.css / styles.css → tailwind.config.* →
+   App.tsx / App.jsx → App.vue → app/layout.tsx →
+   styles.scss → main.dart → 无样式项目
+
+② 提取：background gradient + accent color（主强调色）
+
+③ 计算辅助值并注入 CSS 变量：
+   --project-ink          = accent 加深 60%
+   --project-ink-muted    = ink 降低饱和度 50%
+   --project-ink-subtle   = ink 透明度 40%
+   --project-accent       = 提取的主色
+   --project-accent-soft  = accent 透明度 10%
+   --project-card         = white 透明度 72%
+   --project-bg-gradient  = 提取的背景渐变（或默认暖白渐变）
+
+④ 写入所有 HTML 的 :root 块
+
+⑤ 验证：grep '__PROJECT_\|#000' 返回 0
+
+⚠️ 检测不到颜色 → 使用中性暖色默认值（#b07080 / #3d2c33），不是 Lumi 专属粉
+```
+
+Step 1 侦察+计数 → Step 2-4 架构图+数据流+技术栈 → Step 5 双格式（MD+HTML）
 
 > ⚠️ **双格式 = .md + .html 两个物理文件，缺一不可。**
 > 不可仅在对话中输出课程内容。所有文件路径必须在 `PRES-learning/` 下，绝不可写入项目 `src/` 或根目录。
