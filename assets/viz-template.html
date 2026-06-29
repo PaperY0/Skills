@@ -450,6 +450,7 @@ body{
 const FILE_TREE = __FILE_TREE_DATA__;
 const TECH_STACK = __TECH_STACK_DATA__;
 const ABILITY_TREE = __ABILITY_TREE_DATA__;
+const PRES_STATE = __PRES_STATE_DATA__;
 
 /* ═══════════════ Tab Switching ═══════════════ */
 function switchTab(name){
@@ -463,7 +464,9 @@ function switchTab(name){
 
 /* ═══════════════ Tree Rendering ═══════════════ */
 function renderTree(nodes,container){
-  for(const node of nodes){
+  // Accept both single object and array
+  const list = Array.isArray(nodes) ? nodes : [nodes];
+  for(const node of list){
     const div=document.createElement('div');
     div.className='tree-node';
     div.setAttribute('data-name',node.name.toLowerCase());
@@ -533,31 +536,36 @@ function renderTech(){
 }
 
 /* ═══════════════ Ability Tree ═══════════════ */
+function getMergedAbilityProgress(){
+  const persisted = (PRES_STATE && PRES_STATE.progress) ? PRES_STATE.progress : {};
+  const localStored = JSON.parse(localStorage.getItem('pres_ability_progress')||'{}');
+  return {...persisted, ...localStored};
+}
 function renderAbilityTree(){
   const container=document.getElementById('ability-tree-container');
-  const stored=JSON.parse(localStorage.getItem('pres_ability_progress')||'{}');
-  container.innerHTML=ABILITY_TREE.map((cat,ci)=>{
+  const stored=getMergedAbilityProgress();
+  container.innerHTML=ABILITY_TREE.map((cat)=>{
     const total=cat.items.length;
     const done=cat.items.filter(item=>stored[item.id]).length;
     const pct=total?Math.round(done/total*100):0;
-    const badgeCls=pct===100?'ability-cat-badge':'';
-    const badgeTxt=pct===100?'✅ 已完成':`${done}/${total}`;
+    const isComplete=pct===100;
     return `
     <div class="ability-category">
       <div class="ability-cat-header">
         <span class="ability-cat-name">${cat.category}</span>
         <span class="ability-cat-stars">${'⭐'.repeat(cat.stars||0)}</span>
-        <span class="${badgeCls}" style="${pct<100?'background:rgba(200,96,122,0.08);color:var(--accent)':''}">${badgeTxt}</span>
+        <span class="ability-cat-badge" style="${isComplete?'':'background:rgba(200,96,122,0.08);color:var(--accent)'}">${isComplete?'✅ 已完成':`${done}/${total}`}</span>
       </div>
       ${cat.items.map(item=>{
         const checked=!!stored[item.id];
+        const progress=checked?100:(item.progress||0);
         return `
         <div class="ability-item">
           <div class="ability-checkbox${checked?' checked':''}" onclick="toggleAbility('${item.id}',this)" title="点击标记完成/未完成">${checked?'✓':''}</div>
           <span class="ability-label${checked?' done':''}">${item.label}</span>
           <span class="ability-progress">
-            <span class="ability-bar"><span class="ability-bar-fill" style="width:${checked?100:item.progress||0}%"></span></span>
-            ${checked?100:item.progress||0}%
+            <span class="ability-bar"><span class="ability-bar-fill" style="width:${progress}%"></span></span>
+            ${progress}%
           </span>
         </div>`;
       }).join('')}
@@ -566,17 +574,39 @@ function renderAbilityTree(){
 }
 function toggleAbility(id,el){
   const stored=JSON.parse(localStorage.getItem('pres_ability_progress')||'{}');
-  if(stored[id]){delete stored[id];el.classList.remove('checked');el.textContent='';
-    const row=el.parentElement;row.querySelector('.ability-label').classList.remove('done');
-    row.querySelector('.ability-bar-fill').style.width='0%';
-    row.querySelector('.ability-progress').childNodes[2].textContent='0%';
-  }else{stored[id]=true;el.classList.add('checked');el.textContent='✓';
-    const row=el.parentElement;row.querySelector('.ability-label').classList.add('done');
-    row.querySelector('.ability-bar-fill').style.width='100%';
-    row.querySelector('.ability-progress').childNodes[2].textContent='100%';
-  }
+  if(stored[id]){delete stored[id];}else{stored[id]=true;}
   localStorage.setItem('pres_ability_progress',JSON.stringify(stored));
-  renderAbilityTree();
+
+  const row=el.parentElement;
+  const cat=row.closest('.ability-category');
+  const checked=!!stored[id];
+
+  // 局部更新：复选框
+  el.classList.toggle('checked',checked);
+  el.textContent=checked?'✓':'';
+
+  // 局部更新：标签
+  row.querySelector('.ability-label').classList.toggle('done',checked);
+
+  // 局部更新：进度条
+  row.querySelector('.ability-bar-fill').style.width=checked?'100%':'0%';
+
+  // 局部更新：百分比文字
+  var pctNodes=row.querySelector('.ability-progress').childNodes;
+  pctNodes[pctNodes.length-1].textContent=checked?'100%':'0%';
+
+  // 局部更新：分类徽章
+  var items=cat.querySelectorAll('.ability-checkbox');
+  var done=[].slice.call(items).filter(function(cb){return cb.classList.contains('checked');}).length;
+  var total=items.length;
+  var badge=cat.querySelector('.ability-cat-badge');
+  var isComplete=done===total;
+  badge.textContent=isComplete?'✅ 已完成':done+'/'+total;
+  badge.style.background=isComplete?'':'rgba(200,96,122,0.08)';
+  badge.style.color=isComplete?'':'var(--accent)';
+}
+function exportAbilityProgress(){
+  return JSON.stringify(getMergedAbilityProgress(),null,2);
 }
 
 /* ═══════════════ File Detail Modal ═══════════════ */

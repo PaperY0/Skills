@@ -3,7 +3,6 @@
 > 🚫 **位置**：`<项目所在目录>/PRES-learning/<项目名>/lessons/`，绝不可写入项目文件夹内。
 > 🚫 **格式**：每课必须同时生成 `.md` + `.html` 两个物理文件，缺一不可。
 > 🚫 **禁止**：绝不可只在对话中输出课程内容，必须写入磁盘。
-> 📄 **HTML 骨架**：`assets/lesson-template.html` —— 每课 HTML 必须基于此模板生成，保持视觉一致。
 
 每个 Ability 严格按 7 步执行。同时生成 `.md` + `.html` 两个文件。
 
@@ -89,16 +88,18 @@ STEP 5 · Code — 代码认知（占整课 50%）
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 6 · Think — 架构思维 ⭐
+STEP 6 · Think — 架构思维 ⭐核心判断力
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-只讨论思维，不讲代码：
+跳出代码，建立 CTO 视角的工程价值观。
+从「四大架构视角」中抽取 2-3 个进行深度剖析：
 
-- 什么时候不用 XX？（小项目直接 Page→DB 就行）
-- 还能怎么设计？（其他方案对比）
-- 如果数据库换了怎么办？（XX 如何隔离变化）
-- 如果多人开发怎么办？（XX 如何防止冲突）
-- 为什么 AI 经常写错？（AI 倾向最短路径）
+1. 【⚖️ 权衡视角】为了实现 XX，企业在这里牺牲了什么？什么时候绝对不要这么写？
+2. 【💣 爆炸半径】如果这部分代码报错，会牵连哪些模块？它是如何做隔离的？
+3. 【📈 演进推演】如果数据量大 100 倍，这行代码哪里会先崩？
+4. 【🤖 AI 协作】这个设计对 AI 友好吗？如果让 AI 接手，你会怎么下达 Prompt 防御指令？
+
+每个深奥的架构模式，必须用生活常识类比。
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -121,7 +122,71 @@ STEP 7 · Output — 输出训练 ⭐最重要
 
 嵌入 quiz：5 题（概念 + 识别 + 定位 + 推理 + AI约束）
 引用 quiz.css + quiz.js，data-quiz-id="L<NN>"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 8 · Persist — 状态持久化
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+本课结束后，必须更新 `PRES-learning/<项目名>/LEARNING-RECORDS/.pres-state.json`：
+
+1. 将本课对应 Ability 的 `progress` 更新为 100（或部分完成值）。
+2. 根据用户在 Teach Back / Recognition / quiz 中的表现，更新 `user_profile.weak_points`。
+3. 将 `current_mission` 更新为下一节课的标题。
+4. 更新 `last_updated` 时间戳。
+
+示例：
+```json
+{
+  "progress": {
+    "react-app": 100
+  },
+  "user_profile": {
+    "weak_points": ["对 useEffect 依赖数组理解不深"],
+    "strengths": ["能用生活类比解释组件"],
+    "preferred_pace": "normal"
+  },
+  "current_mission": "L02 · Express 后端骨架",
+  "last_updated": "2026-06-29T12:00:00.000Z"
+}
+```
 ```
 
 > ⚠️ **生成检查**：本课是否同时存在 `.md` 和 `.html` 两个物理文件？
 > 二者缺一则本课未完成。文件路径是否在 `PRES-learning/` 下？不在则放错位置。
+>
+> **📐 HTML 结构检查清单（每课必须逐项确认）**：
+> - [ ] 本课 HTML 使用 hero + 7 glass-card + quiz + footer 结构
+> - [ ] 引用了 `../assets/lesson-styles.css` + `../assets/quiz.css` + `../assets/quiz.js`
+> - [ ] 7 个 STEP 全部使用 `<div class="glass-card">`
+> - [ ] 每步头部使用 `<div class="step-header">` + `<div class="step-title">`
+> - [ ] STEP 6 讨论了 2-3 个架构视角（权衡/爆炸半径/演进/AI协作）
+> - [ ] quiz 的 `data-quiz-id` 格式正确，且包含 `data-correct` + `data-explanation`
+> - [ ] 已生成/更新 `LEARNING-RECORDS/.pres-state.json`
+> - [ ] 文件路径在 `PRES-learning/<项目名>/lessons/` 下，未污染项目源码
+> - [ ] STEP 7 所有参考答案用 `.reveal-answer` + `.reveal-btn` 包裹，默认隐藏
+> - [ ] MD 中答案用 `<details><summary>` 标签包裹
+
+## STEP 7 答案隐藏强制规范
+
+**HTML 中所有参考答案必须用以下结构包裹（禁止直接暴露）**：
+
+```html
+<div class="reveal-answer">
+  <button class="reveal-btn" onclick="revealAnswer(this)">💡 点击查看答案</button>
+  <div class="reveal-content">
+    <!-- 答案内容：blockquote / table / p / pre 等 -->
+  </div>
+</div>
+```
+
+**MD 中所有参考答案必须用 `<details>` 标签包裹**：
+
+```html
+<details><summary>点我查看答案</summary>
+
+答案内容...
+
+</details>
+```
+
+**适用范围**：Teach Back 参考范例、Recognition 代码雷达答案、Transfer 表格中的迁移映射列、Creation 设计参考方案。

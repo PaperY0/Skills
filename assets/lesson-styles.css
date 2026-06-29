@@ -1,8 +1,7 @@
 /* ═══════════════ PRES Lesson Shared Stylesheet ═══════════════ */
 /*  All lesson HTML files link to this stylesheet to ensure    */
 /*  a consistent, beautiful course appearance.                 */
-/*  Typography: rounded Nunito, 4-level hierarchy, 1.75 LH.    */
-/*  Colors: var(--project-*) injected by Step 0 per project.   */
+/*  Design: Apple-inspired glassmorphism, project-aware colors.*/
 /* ═══════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
@@ -10,265 +9,588 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  /* ── Project colors injected by Step 0; neutral warm fallbacks ── */
-  --lesson-ink:var(--project-ink,#3d2c33);
-  --lesson-ink-muted:var(--project-ink-muted,#6b5560);
-  --lesson-ink-subtle:var(--project-ink-subtle,#9a8590);
-  --lesson-bg:var(--project-bg,#faf7f5);
-  --lesson-card:var(--project-card,rgba(255,255,255,0.72));
-  --lesson-accent:var(--project-accent,#b07080);
-  --lesson-accent-soft:var(--project-accent-soft,rgba(176,112,128,0.1));
-  --lesson-radius:18px;--lesson-shadow:0 2px 12px rgba(74,48,56,0.06);
+  /* 🎨 Project-aware colors. Each lesson HTML must override these via
+     its own :root block based on SKILL.md Step 0 color extraction. */
+  --project-ink:#3d2c33;
+  --project-ink-muted:#6b5560;
+  --project-ink-subtle:#9a8590;
+  --project-bg:#faf7f5;
+  --project-card:rgba(255,255,255,0.72);
+  --project-accent:#b07080;
+  --project-accent-soft:rgba(176,112,128,0.1);
+  --project-bg-gradient:linear-gradient(160deg,#faf7f5 0%,#f5f0f0 100%);
+
+  /* Derived glass tokens */
+  --glass-blur:24px;
+  --glass-border:rgba(255,255,255,0.55);
+  --glass-shadow:
+    0 20px 60px rgba(74,48,56,0.06),
+    0 4px 16px rgba(74,48,56,0.05);
+  --glass-shadow-hover:
+    0 28px 72px rgba(74,48,56,0.08),
+    0 6px 20px rgba(74,48,56,0.06);
+
+  /* Component colors */
+  --success:#30b46e;
+  --success-soft:rgba(48,180,110,0.1);
+  --warning:#f59e0b;
+  --warning-soft:rgba(245,158,11,0.1);
+  --danger:#e04040;
+  --danger-soft:rgba(224,64,64,0.1);
+  --info:#3b82f6;
+  --info-soft:rgba(59,130,246,0.1);
+
+  --radius-sm:8px;
+  --radius-md:12px;
+  --radius-lg:18px;
+  --radius-xl:24px;
 }
 
 body{
   font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
-  background:var(--project-bg-gradient,linear-gradient(160deg,#faf7f5 0%,#f5f0f0 100%));
-  color:var(--lesson-ink);min-height:100vh;line-height:1.75;
-  font-size:17px;font-weight:500;letter-spacing:0.01em;
-  -webkit-font-smoothing:antialiased;max-width:1100px;margin:0 auto;padding:40px 32px 80px;
+  background:var(--project-bg-gradient);
+  color:var(--project-ink);
+  min-height:100vh;
+  line-height:1.75;
+  font-size:17px;
+  font-weight:500;
+  letter-spacing:0.01em;
+  -webkit-font-smoothing:antialiased;
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 32px 80px;
 }
 
-/* ═══════════════ 4-Level Heading Hierarchy ═══════════════ */
-.step-marker{
-  display:inline-block;padding:5px 16px;border-radius:9999px;
-  font-size:13px;font-weight:700;letter-spacing:0.06em;
-  background:var(--lesson-accent-soft);color:var(--lesson-accent);
-  margin-bottom:12px;
-}
+/* ═══════════════ Typography ═══════════════ */
+h1{font-size:36px;font-weight:800;letter-spacing:0.04em;line-height:1.3;margin:24px 0 16px;color:var(--project-ink)}
+h2{font-size:28px;font-weight:800;letter-spacing:0.04em;line-height:1.3;margin:36px 0 16px;color:var(--project-ink)}
+h3{font-size:20px;font-weight:600;letter-spacing:0.02em;line-height:1.4;margin:28px 0 10px;color:var(--project-ink-muted)}
+p{margin:12px 0;color:var(--project-ink);line-height:1.75}
+
+/* Legacy class names preserved for backwards compatibility */
 .section-title{
   font-size:28px;font-weight:800;letter-spacing:0.04em;line-height:1.3;
-  color:var(--lesson-ink);margin:8px 0 20px;
+  color:var(--project-ink);margin:8px 0 20px;
 }
 .sub-title{
   font-size:20px;font-weight:600;letter-spacing:0.02em;line-height:1.4;
-  color:var(--lesson-ink-muted);margin:28px 0 10px;
+  color:var(--project-ink-muted);margin:28px 0 10px;
 }
-.body-text{font-size:17px;font-weight:500;line-height:1.75;color:var(--lesson-ink)}
-h1{font-size:36px;font-weight:800;letter-spacing:0.04em;line-height:1.3;margin:24px 0 16px;color:var(--lesson-ink)}
-h2{font-size:28px;font-weight:800;letter-spacing:0.04em;line-height:1.3;margin:36px 0 16px;color:var(--lesson-ink)}
-h3{font-size:20px;font-weight:600;letter-spacing:0.02em;line-height:1.4;margin:28px 0 10px;color:var(--lesson-ink-muted)}
-p{margin:12px 0;color:var(--lesson-ink);line-height:1.75}
+.body-text{font-size:17px;font-weight:500;line-height:1.75;color:var(--project-ink)}
+.step-marker{
+  display:inline-block;padding:5px 16px;border-radius:9999px;
+  font-size:13px;font-weight:700;letter-spacing:0.06em;
+  background:var(--project-accent-soft);color:var(--project-accent);
+  margin-bottom:12px;
+}
 
 /* ═══════════════ Lists ═══════════════ */
 ol{list-style:none;counter-reset:lesson-step;padding-left:0;margin:16px 0}
 ol li{counter-increment:lesson-step;position:relative;padding-left:44px;margin-bottom:16px;line-height:1.75}
-ol li::before{content:counter(lesson-step)".";position:absolute;left:0;width:34px;text-align:right;font-weight:600;color:var(--lesson-accent);font-size:15px}
+ol li::before{content:counter(lesson-step)".";position:absolute;left:0;width:34px;text-align:right;font-weight:600;color:var(--project-accent);font-size:15px}
 ol li:last-child{margin-bottom:0}
 ul{list-style:none;padding-left:0;margin:16px 0}
 ul li{position:relative;padding-left:24px;margin-bottom:14px;line-height:1.75}
-ul li::before{content:"•";position:absolute;left:6px;color:var(--lesson-accent);font-weight:700}
+ul li::before{content:"•";position:absolute;left:6px;color:var(--project-accent);font-weight:700}
 ul li:last-child{margin-bottom:0}
 
-/* ═══════════════ Code Blocks ═══════════════ */
-pre,code{font-family:'SF Mono','Cascadia Code','Fira Code',monospace;font-size:14px;letter-spacing:0}
-pre{
-  background:#2d2a2e;color:#e8d5e0;border-radius:12px;
-  padding:24px;overflow-x:auto;line-height:1.6;margin:20px 0 24px;
+/* ═══════════════ Glass Card (毛玻璃卡片) ═══════════════ */
+.glass-card,
+.lesson-section{
+  background:var(--project-card);
+  backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(180%);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-xl);
+  padding:36px 40px;
+  margin-bottom:32px;
+  box-shadow:var(--glass-shadow);
+  animation:cardSlideUp 0.6s cubic-bezier(0.22,0.1,0.25,1) both;
+  transition:transform 0.25s ease,box-shadow 0.3s ease;
 }
-code{background:rgba(176,112,128,0.08);padding:2px 6px;border-radius:4px;font-size:14px}
-pre code{background:none;padding:0}
-.file-path{font-weight:600;font-family:'SF Mono',monospace;color:var(--lesson-accent);font-size:15px}
-
-/* ═══════════════ Tables ═══════════════ */
-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px;table-layout:auto}
-th,td{padding:14px 20px;text-align:left;border-bottom:1px solid rgba(176,112,128,0.1)}
-th{font-weight:700;color:var(--lesson-accent)}
-
-/* ═══════════════ Blockquotes ═══════════════ */
-blockquote{
-  border-left:3px solid var(--lesson-accent);padding:14px 22px;margin:20px 0;
-  background:var(--lesson-accent-soft);border-radius:0 12px 12px 0;color:var(--lesson-ink-muted);
-  line-height:1.75;
+.glass-card:hover,
+.lesson-section:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--glass-shadow-hover);
 }
-.note{color:var(--lesson-ink-subtle);font-size:15px;font-weight:400;line-height:1.75}
+.glass-card:nth-child(2){animation-delay:0.04s}
+.glass-card:nth-child(3){animation-delay:0.08s}
+.glass-card:nth-child(4){animation-delay:0.12s}
+.glass-card:nth-child(5){animation-delay:0.16s}
+.glass-card:nth-child(6){animation-delay:0.20s}
+.glass-card:nth-child(7){animation-delay:0.24s}
+.glass-card:nth-child(8){animation-delay:0.28s}
 
-/* ═══════════════ Misc ═══════════════ */
-.lesson-divider{border:none;border-top:2px dashed rgba(176,112,128,0.15);margin:36px 0}
-.lesson-tag{display:inline-block;padding:5px 16px;border-radius:9999px;font-size:13px;font-weight:600;background:var(--lesson-accent-soft);color:var(--lesson-accent)}
-
-/* ═══════════════════════════════════════════════════════════ */
-/*  COMPONENT CLASSES — shared across all lessons             */
-/*  Apple glassmorphism + card slide-in everywhere            */
-/* ═══════════════════════════════════════════════════════════ */
-
-/* ── Glass Card (毛玻璃卡片) ── */
-.glass-card{
-  background:var(--lesson-card);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  border:1px solid rgba(255,255,255,0.55);
-  border-radius:24px;
-  padding:32px 36px;
-  margin-bottom:28px;
-  box-shadow:0 2px 16px rgba(74,48,56,0.06);
-  animation:cardSlideUp 0.5s cubic-bezier(0.25,0.1,0.25,1) both;
-}
-.glass-card:nth-child(2){animation-delay:0.05s}
-.glass-card:nth-child(3){animation-delay:0.1s}
-.glass-card:nth-child(4){animation-delay:0.15s}
-.glass-card:nth-child(5){animation-delay:0.2s}
-.glass-card:nth-child(6){animation-delay:0.25s}
-.glass-card:nth-child(7){animation-delay:0.3s}
-.glass-card:nth-child(8){animation-delay:0.35s}
-
-/* ── Lesson Hero (课程头部) ── */
+/* ═══════════════ Lesson Hero ═══════════════ */
 .lesson-hero{
-  text-align:center;padding:48px 24px 36px;
+  text-align:center;
+  padding:48px 24px 36px;
+  margin-bottom:8px;
 }
 .lesson-hero .lesson-number{
-  display:inline-block;padding:6px 20px;border-radius:9999px;
-  font-size:13px;font-weight:700;letter-spacing:0.08em;
-  background:var(--lesson-accent-soft);color:var(--lesson-accent);
+  display:inline-block;
+  padding:6px 20px;
+  border-radius:9999px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  background:var(--project-accent-soft);
+  color:var(--project-accent);
   margin-bottom:16px;
 }
 .lesson-hero h1{
-  font-size:38px;margin:12px 0 8px;font-weight:800;
-  letter-spacing:0.04em;line-height:1.3;color:var(--lesson-ink);
+  font-size:34px;
+  margin:12px 0 8px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  line-height:1.25;
+  color:var(--project-ink);
 }
 .lesson-hero .ability-tagline{
-  font-size:18px;color:var(--lesson-ink-muted);font-weight:500;
-  max-width:640px;margin:0 auto 24px;line-height:1.6;
+  font-size:18px;
+  color:var(--project-ink-muted);
+  font-weight:500;
+  max-width:640px;
+  margin:0 auto 24px;
+  line-height:1.6;
 }
 .lesson-meta{
-  display:flex;justify-content:center;gap:24px;flex-wrap:wrap;
-  font-size:14px;color:var(--lesson-ink-subtle);
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  flex-wrap:wrap;
+  font-size:14px;
+  color:var(--project-ink-subtle);
 }
 .lesson-meta span{display:inline-flex;align-items:center;gap:6px}
 
-/* ── Step Header (每步的标题区) ── */
+/* ═══════════════ Step Header ═══════════════ */
 .step-header{
-  display:flex;align-items:center;gap:14px;margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:8px;
 }
 .step-header .step-num{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:36px;height:36px;border-radius:12px;
-  background:linear-gradient(135deg,var(--lesson-accent),rgba(176,112,128,0.8));
-  color:#fff;font-size:16px;font-weight:800;flex-shrink:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:42px;
+  border-radius:var(--radius-md);
+  background:linear-gradient(135deg,var(--project-accent),rgba(176,112,128,0.7));
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  flex-shrink:0;
+  box-shadow:0 2px 8px var(--project-accent-soft);
 }
 .step-header .step-label{
-  font-size:13px;font-weight:700;letter-spacing:0.06em;
-  color:var(--lesson-accent);text-transform:uppercase;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  color:var(--project-accent);
+  text-transform:uppercase;
 }
 .step-title{
-  font-size:26px;font-weight:800;letter-spacing:0.03em;line-height:1.3;
-  color:var(--lesson-ink);margin:4px 0 16px;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:0.03em;
+  line-height:1.3;
+  color:var(--project-ink);
+  margin:4px 0 16px;
 }
 
-/* ── Mission Quote (使命引用) ── */
+/* ═══════════════ Mission Quote ═══════════════ */
 .mission-quote{
-  background:linear-gradient(135deg,rgba(176,112,128,0.06),rgba(180,130,120,0.04));
-  border-left:4px solid var(--lesson-accent);border-radius:0 16px 16px 0;
-  padding:20px 28px;margin:20px 0;font-size:17px;font-weight:600;
-  color:var(--lesson-ink);line-height:1.7;
+  background:linear-gradient(135deg,var(--project-accent-soft),rgba(176,112,128,0.03));
+  border-left:4px solid var(--project-accent);
+  border-radius:0 var(--radius-md) var(--radius-md) 0;
+  padding:24px 32px;
+  margin:24px 0;
+  font-size:18px;
+  font-weight:600;
+  color:var(--project-ink);
+  line-height:1.75;
+  box-shadow:0 2px 12px rgba(74,48,56,0.04);
 }
 
-/* ── ASCII Diagram (架构图/流程图暗色容器) ── */
+/* ═══════════════ Code Blocks ═══════════════ */
+pre,code{
+  font-family:'SF Mono','Cascadia Code','Fira Code','JetBrains Mono',monospace;
+  font-size:14px;
+  letter-spacing:0;
+}
+pre{
+  background:#2d2a2e;
+  color:#e8d5e0;
+  border-radius:var(--radius-md);
+  padding:24px 28px;
+  overflow-x:auto;
+  line-height:1.6;
+  margin:20px 0 24px;
+  border:1px solid rgba(200,96,122,0.12);
+  box-shadow:inset 0 1px 4px rgba(0,0,0,0.15),0 4px 16px rgba(74,48,56,0.06);
+}
+code{
+  background:rgba(176,112,128,0.08);
+  padding:2px 6px;
+  border-radius:4px;
+  font-size:14px;
+}
+pre code{background:none;padding:0}
+.file-path{
+  font-weight:600;
+  font-family:'SF Mono',monospace;
+  color:var(--project-accent);
+  font-size:15px;
+}
+
+/* ═══════════════ ASCII Diagram ═══════════════ */
 .ascii-diagram{
-  background:#2d2a2e;color:#e8d5e0;border-radius:12px;
-  padding:20px 24px;font-family:'Cascadia Code','Fira Code','Consolas','Monaco',monospace;
-  font-size:12px;line-height:1.45;overflow-x:auto;white-space:pre;
-  margin:16px 0;border:1px solid rgba(176,112,128,0.18);
+  background:#2d2a2e;
+  color:#e8d5e0;
+  border-radius:var(--radius-md);
+  padding:20px 24px;
+  font-family:'Cascadia Code','Fira Code','Consolas','Monaco',monospace;
+  font-size:12px;
+  line-height:1.45;
+  overflow-x:auto;
+  white-space:pre;
+  margin:16px 0;
+  border:1px solid rgba(176,112,128,0.18);
 }
 .ascii-diagram.light{
-  background:#faf7f5;color:var(--lesson-ink);
-  border:1px solid rgba(176,112,128,0.15);
+  background:var(--project-card);
+  color:var(--project-ink);
+  border:1px solid var(--glass-border);
 }
 
-/* ── Compare Grid (左右对比) ── */
+/* ═══════════════ Tables ═══════════════ */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:20px 0;
+  font-size:15px;
+  table-layout:auto;
+}
+th,td{
+  padding:16px 24px;
+  text-align:left;
+  border-bottom:1px solid rgba(176,112,128,0.1);
+}
+th{
+  font-weight:700;
+  color:var(--project-accent);
+  font-size:13px;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+}
+tbody tr:nth-child(even){background:rgba(176,112,128,0.03)}
+tbody tr:last-child td{border-bottom:none}
+
+/* ═══════════════ Blockquotes & Notes ═══════════════ */
+blockquote{
+  border-left:3px solid var(--project-accent);
+  padding:16px 24px;
+  margin:20px 0;
+  background:linear-gradient(135deg,var(--project-accent-soft),rgba(176,112,128,0.03));
+  border-radius:0 var(--radius-md) var(--radius-md) 0;
+  color:var(--project-ink-muted);
+  line-height:1.75;
+  font-size:16px;
+}
+.note{
+  color:var(--project-ink-subtle);
+  font-size:15px;
+  font-weight:400;
+  line-height:1.75;
+}
+
+/* ═══════════════ Progress Bar ═══════════════ */
+.progress-bar{
+  height:8px;
+  background:rgba(176,112,128,0.1);
+  border-radius:4px;
+  overflow:hidden;
+  margin:12px 0;
+}
+.progress-fill{
+  height:100%;
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--project-accent),rgba(176,112,128,0.6));
+  transition:width 0.5s cubic-bezier(0.22,0.1,0.25,1);
+}
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:var(--project-ink-muted);
+  margin-top:4px;
+}
+
+/* ═══════════════ Highlight Boxes ═══════════════ */
+.highlight-box,
+.highlight-tip,
+.highlight-warning,
+.highlight-success,
+.highlight-info{
+  border-radius:var(--radius-md);
+  padding:18px 24px;
+  margin:16px 0;
+  font-size:15px;
+  line-height:1.7;
+  border:1px solid transparent;
+}
+.highlight-box{
+  background:var(--project-card);
+  border-color:var(--glass-border);
+  box-shadow:var(--glass-shadow);
+}
+.highlight-tip{
+  background:var(--warning-soft);
+  border-color:rgba(245,158,11,0.2);
+  color:#7a5a20;
+}
+.highlight-warning{
+  background:var(--danger-soft);
+  border-color:rgba(224,64,64,0.2);
+  color:#8b3030;
+}
+.highlight-success{
+  background:var(--success-soft);
+  border-color:rgba(48,180,110,0.2);
+  color:#1a6b3c;
+}
+.highlight-info{
+  background:var(--info-soft);
+  border-color:rgba(59,130,246,0.2);
+  color:#1e40af;
+}
+
+/* ═══════════════ Accordion / Foldable Panel ═══════════════ */
+.accordion{
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-md);
+  background:var(--project-card);
+  margin:16px 0;
+  overflow:hidden;
+  box-shadow:var(--glass-shadow);
+}
+.accordion-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 24px;
+  cursor:pointer;
+  font-weight:600;
+  color:var(--project-ink);
+  background:rgba(176,112,128,0.03);
+  transition:background 0.2s ease;
+}
+.accordion-header:hover{background:rgba(176,112,128,0.06)}
+.accordion-header::after{
+  content:"▶";
+  font-size:12px;
+  color:var(--project-accent);
+  transition:transform 0.25s ease;
+}
+.accordion.open .accordion-header::after{transform:rotate(90deg)}
+.accordion-body{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.35s ease,padding 0.35s ease;
+  padding:0 24px;
+}
+.accordion.open .accordion-body{
+  max-height:2000px;
+  padding:16px 24px 24px;
+}
+
+/* ═══════════════ Compare Grid ═══════════════ */
 .compare-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin:20px 0;
 }
 .compare-grid .bad-col{
-  background:rgba(200,96,122,0.06);border:1px solid rgba(200,96,122,0.18);
-  border-radius:16px;padding:20px 24px;
+  background:rgba(200,96,122,0.06);
+  border:1px solid rgba(200,96,122,0.18);
+  border-radius:var(--radius-md);
+  padding:24px 28px;
+  box-shadow:0 2px 12px rgba(74,48,56,0.03);
 }
 .compare-grid .good-col{
-  background:rgba(128,192,168,0.08);border:1px solid rgba(128,192,168,0.22);
-  border-radius:16px;padding:20px 24px;
+  background:rgba(128,192,168,0.07);
+  border:1px solid rgba(128,192,168,0.22);
+  border-radius:var(--radius-md);
+  padding:24px 28px;
+  box-shadow:0 2px 12px rgba(74,48,56,0.03);
 }
-.compare-grid h4{font-size:15px;font-weight:700;margin:0 0 8px;}
+.compare-grid h4{
+  font-size:15px;
+  font-weight:700;
+  margin:0 0 12px;
+  letter-spacing:0.02em;
+}
 
-/* ── Recognition Cards (代码识别三选一卡片) ── */
+/* ═══════════════ Recognition Cards ═══════════════ */
 .recognition-options{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:16px;margin:16px 0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  margin:20px 0;
 }
 .recognition-card{
-  border-radius:18px;padding:24px;
+  border-radius:var(--radius-md);
+  padding:24px 28px;
   border:2px solid rgba(176,112,128,0.12);
   background:rgba(255,255,255,0.5);
+  box-shadow:0 2px 12px rgba(74,48,56,0.04);
+  transition:border-color 0.2s,box-shadow 0.2s;
 }
-.recognition-card h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--lesson-ink)}
+.recognition-card:hover{
+  border-color:rgba(176,112,128,0.25);
+  box-shadow:0 4px 20px rgba(74,48,56,0.08);
+}
+.recognition-card h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--project-ink)}
 
-/* ── Transfer Table (能力迁移表格) ── */
+/* ═══════════════ Transfer Table ═══════════════ */
 .transfer-table{
-  width:100%;border-collapse:separate;border-spacing:0;
-  margin:16px 0 28px;border-radius:16px;overflow:hidden;
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin:16px 0 28px;
+  border-radius:var(--radius-md);
+  overflow:hidden;
   border:1px solid rgba(176,112,128,0.12);
+  box-shadow:0 2px 12px rgba(74,48,56,0.04);
 }
 .transfer-table th{
-  background:rgba(176,112,128,0.08);padding:14px 20px;
-  font-size:13px;font-weight:700;letter-spacing:0.04em;
-  color:var(--lesson-accent);text-align:left;
+  background:rgba(176,112,128,0.08);
+  padding:16px 24px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.04em;
+  color:var(--project-accent);
+  text-align:left;
+  text-transform:uppercase;
 }
 .transfer-table td{
-  padding:14px 20px;font-size:14px;
+  padding:16px 24px;
+  font-size:14px;
   border-top:1px solid rgba(176,112,128,0.08);
-  color:var(--lesson-ink);
+  color:var(--project-ink);
 }
+.transfer-table tbody tr:last-child td{border-bottom:none}
 
-/* ── Timeline (灾难时间线) ── */
-.timeline{
-  position:relative;padding-left:24px;
-  border-left:2px solid rgba(176,112,128,0.2);margin:16px 0;
-}
-.timeline .tl-item{
-  position:relative;margin-bottom:16px;padding-left:20px;
-}
-.timeline .tl-item::before{
-  content:'';position:absolute;left:-31px;top:6px;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--lesson-accent);border:3px solid #fff;
-  box-shadow:0 0 0 1px rgba(176,112,128,0.3);
-}
-
-/* ── Tech Card (技术卡片) ── */
+/* ═══════════════ Tech Card ═══════════════ */
 .tech-card{
-  background:var(--lesson-card);border:1px solid rgba(176,112,128,0.15);
-  border-radius:16px;padding:20px 24px;margin:16px 0;
+  background:var(--project-card);
+  border:1px solid rgba(176,112,128,0.15);
+  border-radius:var(--radius-md);
+  padding:20px 24px;
+  margin:16px 0;
   box-shadow:0 4px 20px rgba(74,48,56,0.06);
 }
 .tech-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
 .tech-card .badge{
-  display:inline-block;padding:3px 12px;border-radius:999px;
-  font-size:11px;font-weight:600;
-  background:var(--lesson-accent-soft);color:var(--lesson-accent);
+  display:inline-block;
+  padding:3px 12px;
+  border-radius:9999px;
+  font-size:11px;
+  font-weight:600;
+  background:var(--project-accent-soft);
+  color:var(--project-accent);
 }
 
-/* ── Output Demo (运行输出演示，暗终端风格) ── */
+/* ═══════════════ Output Demo (terminal style) ═══════════════ */
 .output-demo{
-  background:#1e1e1e;color:#d4d4d4;border-radius:12px;
-  padding:16px 20px;margin:16px 0;
+  background:#1e1e1e;
+  color:#d4d4d4;
+  border-radius:var(--radius-md);
+  padding:16px 20px;
+  margin:16px 0;
   font-family:'Cascadia Code','Consolas',monospace;
-  font-size:13px;line-height:1.6;
+  font-size:13px;
+  line-height:1.6;
 }
 .output-demo .cmd{color:#569cd6}
 .output-demo .think{color:#6a9955}
 .output-demo .result{color:#ce9178}
 
-/* ── Code Radar Badge ── */
+/* ═══════════════ Code Radar Badge ═══════════════ */
 .code-radar-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:4px 12px;border-radius:9999px;
-  font-size:12px;font-weight:700;letter-spacing:0.04em;
-  background:rgba(196,164,112,0.14);color:#8a6d40;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 12px;
+  border-radius:9999px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.04em;
+  background:rgba(196,164,112,0.14);
+  color:#8a6d40;
 }
 
-/* ── Footer ── */
+/* ═══════════════ Misc ═══════════════ */
+.lesson-divider{
+  border:none;
+  border-top:2px dashed rgba(176,112,128,0.15);
+  margin:36px 0;
+}
+.lesson-tag{
+  display:inline-block;
+  padding:5px 16px;
+  border-radius:9999px;
+  font-size:13px;
+  font-weight:600;
+  background:var(--project-accent-soft);
+  color:var(--project-accent);
+}
 .lesson-footer{
-  text-align:center;padding:32px 0 8px;
-  color:var(--lesson-ink-subtle);font-size:13px;
+  text-align:center;
+  padding:32px 0 8px;
+  color:var(--project-ink-subtle);
+  font-size:13px;
+}
+
+/* ═══════════════ Reveal Answer (答案盲盒) ═══════════════ */
+.reveal-answer{
+  position:relative;
+  margin:16px 0;
+}
+.reveal-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 22px;
+  border-radius:9999px;
+  border:1px solid var(--project-accent);
+  background:var(--project-accent-soft);
+  color:var(--project-accent);
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  font-family:'Nunito','Quicksand','PingFang SC','Noto Sans SC',sans-serif;
+}
+.reveal-btn:hover{
+  background:var(--project-accent);
+  color:#fff;
+}
+.reveal-btn:active{transform:scale(0.97)}
+.reveal-content{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.5s cubic-bezier(0.22,1,0.36,1),padding 0.3s ease,opacity 0.3s ease;
+  opacity:0;
+}
+.reveal-content.open{
+  max-height:4000px;
+  opacity:1;
+  padding-top:16px;
 }
 
 /* ═══════════════ Animations ═══════════════ */
@@ -293,6 +615,8 @@ blockquote{
 @media(max-width:640px){
   body{padding:20px 16px 60px;font-size:16px;line-height:1.7}
   h1{font-size:28px}h2{font-size:24px}.section-title{font-size:24px}
-  .glass-card{padding:22px}
+  .glass-card,.lesson-section{padding:22px}
+  .step-title{font-size:22px}
   pre{padding:18px}
+  .lesson-meta{gap:12px}
 }

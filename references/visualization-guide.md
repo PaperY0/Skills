@@ -69,12 +69,12 @@
 | `__TECH_STACK_DATA__` | JS 数组 `[{name, role, analogy, why, badge}]` |
 | `__FLOW_SECTIONS__` | 数据流图的 `<div class="flow-section">` HTML 片段 |
 | `__LAYERS_DATA__` | 架构层的 `<div class="layer">` HTML 片段 |
-| `__ROUTES_DATA__` | 页面路由的 HTML 片段 |
+| `__ROUTES_DATA__` | 页面路由的 HTML 片段（必须包含前端页面路由 + 后端 API 路由两组，每组一个 `.routes-diagram`） |
 | `__LAYER_MAP__` | JS 对象 `{layerName: searchKeyword}`，用于层点击跳转 |
+| `__PRES_STATE_DATA__` | JS 对象，从 `.pres-state.json` 读取的学习状态 |
 | `__ANALOGY_FUNCTION_BODY__` | `getAnalogy()` 函数体，根据文件名返回类比文字 |
 | `__CONSEQUENCE_FUNCTION_BODY__` | `getConsequence()` 函数体 |
 | `__WHEN_FUNCTION_BODY__` | `getWhen()` 函数体 |
-| `__ABILITY_TREE_DATA__` | JS 数组 `[{category, stars, items: [{id, label, progress}]}]`，从 ABILITY-TREE.md 解析生成 |
 
 ### FILE_TREE_DATA 格式
 
@@ -104,6 +104,7 @@ const FILE_TREE = [
 - `analogy`：根据文件所在层级写生活类比。types/ → 图纸/合同类，db/ → 仓库/货架类，stores/ → 公告栏/广播类，hooks/ → 套餐/流程类，components/ → 乐高/家具类，server/ → 后厨/金库类，utils/ → 工具箱类
 - `consequence`：写"如果删掉/改坏这个文件会发生什么"，具体到功能层面
 - `when`：写"什么时候需要改这个文件"，给出可操作的场景
+- **完整性约束**：FILE_TREE_DATA 必须包含项目至少 **80%** 的源文件节点（排除 node_modules/.git）。`backend/src/routes/`、`backend/src/services/`、`frontend/src/components/` 等重要目录必须展开到文件级。每个文件必须有专属的 `analogy`、`consequence`、`when`。
 
 ### TECH_STACK_DATA 格式
 
@@ -114,19 +115,21 @@ const TECH_STACK = [
 ];
 ```
 
-### ABILITY_TREE_DATA 格式
+### 三个分析函数（已改为读节点字段）
 
-从 `ABILITY-TREE.md` 按分类 + 能力项解析，每项带 `id`（用于 localStorage 标记完成状态）、`label`（能力名）、`progress`（初始进度）。
+模板中 `getAnalogy(node)` / `getConsequence(node)` / `getWhen(node)` 现在**直接读取节点自带字段**：
+- `return node.analogy || '暂无类比信息'`
+- `return node.consequence || '暂无后果分析'`
+- `return node.when || '暂无修改指引'`
+
+**不再使用 `n.includes()` 关键词匹配**。FILE_TREE 生成时就必须为每个节点填充专属的 `analogy` / `consequence` / `when` 字段。
+
+### `__ABILITY_TREE_DATA__` 格式
+
+从 `ABILITY-TREE.md` 按分类 + 能力项解析，每项带 `id`（用于标记完成状态）、`label`（能力名）、`progress`（初始进度）。
 
 ```javascript
 const ABILITY_TREE = [
-  {category:'系统认知', stars:0, items:[
-    {id:'sys-dir',   label:'能够看懂目录结构', progress:0},
-    {id:'sys-entry', label:'能够找到项目入口', progress:0},
-    {id:'sys-module',label:'能够理解模块职责', progress:0},
-    {id:'sys-flow',  label:'能够画出数据流', progress:50},
-    {id:'sys-route', label:'能够理解页面跳转', progress:0},
-  ]},
   {category:'React', stars:5, items:[
     {id:'react-comp',   label:'能够识别组件', progress:0},
     {id:'react-jsx',    label:'能够理解 JSX', progress:0},
@@ -138,26 +141,40 @@ const ABILITY_TREE = [
 ```
 
 **生成规则**：
-- `category` ← ABILITY-TREE.md 中的分类名（如 `## React（⭐⭐⭐⭐⭐）`）
+- `category` ← `ABILITY-TREE.md` 中的分类名（如 `## React（⭐⭐⭐⭐⭐）`）
 - `stars` ← 提取 ⭐ 数量（如 5）
 - `items[].id` ← 分类缩写 + 能力缩写，确保唯一（如 `react-comp`）
-- `items[].label` ← ABILITY-TREE.md 中的能力描述文字
-- `items[].progress` ← 初始 0，学完课程后手动勾选设为 100
+- `items[].label` ← `ABILITY-TREE.md` 中的能力描述文字
+- `items[].progress` ← 初始 0，学完课程后设为 100
 
-### 三个分析函数（已改为读节点字段）
+### `__PRES_STATE_DATA__` 格式
 
-模板中 `getAnalogy(node)` / `getConsequence(node)` / `getWhen(node)` 现在**直接读取节点自带字段**：
-- `return node.analogy || '暂无类比信息'`
-- `return node.consequence || '暂无后果分析'`
-- `return node.when || '暂无修改指引'`
+从 `LEARNING-RECORDS/.pres-state.json` 读取，注入到 `project-viz.html` 中：
 
-**不再使用 `n.includes()` 关键词匹配**。FILE_TREE 生成时就必须为每个节点填充专属的 `analogy` / `consequence` / `when` 字段。
+```javascript
+const PRES_STATE = {
+  progress: {
+    'react-comp': 100,
+    'react-jsx': 50,
+    'react-hooks': 0,
+  },
+  user_profile: {
+    weak_points: ['对异步逻辑理解慢'],
+    strengths: ['能理解生活类比'],
+    preferred_pace: 'normal'
+  },
+  current_mission: 'L02 · Express 后端骨架',
+  last_updated: '2026-06-29T12:00:00.000Z'
+};
+```
+
+页面端优先使用 `PRES_STATE.progress`，用户勾选后再回写到 `localStorage`。
 
 ### 生成后验证
 
 生成 HTML 后验证：
 - [ ] 浏览器直接打开能正常显示
-- [ ] 6 个 Tab 都能正常切换（含能力树）
+- [ ] 6 个 Tab 都能正常切换（tree / flow / layers / tech / routes / ability）
 - [ ] 文件树可以展开/折叠
 - [ ] 搜索过滤功能正常
 - [ ] 点击文件弹出详情弹窗

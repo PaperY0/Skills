@@ -27,7 +27,66 @@ Project → PRES Learning Engine → Independent Developer
 
 ---
 
-## Layer 0 — Learning Philosophy（不可变核心）
+## Layer 0 — Init Protocol（系统初始化）
+
+**首次为一个项目启动 PRES 时，必须先执行初始化协议。**
+
+初始化协议确保所有后续课程共享同一套基础设施，避免每个 HTML 文件重复内嵌样式和脚本。
+
+### 必须创建的基础依赖文件
+
+首次生成 `PRES-learning/<项目名>/` 目录时，必须同时创建：
+
+| 文件 | 来源 | 目标位置 |
+|------|------|----------|
+| `lesson-styles.css` | 复制 `assets/lesson-styles.css` | `PRES-learning/<项目名>/assets/lesson-styles.css` |
+| `quiz.css` | 复制 `assets/quiz.css` | `PRES-learning/<项目名>/assets/quiz.css` |
+| `quiz.js` | 复制 `assets/quiz.js` | `PRES-learning/<项目名>/assets/quiz.js` |
+
+### 必须创建的状态文件
+
+| 文件 | 初始内容 | 目标位置 |
+|------|----------|----------|
+| `.pres-state.json` | 见下方 JSON | `PRES-learning/<项目名>/LEARNING-RECORDS/.pres-state.json` |
+
+```json
+{
+  "progress": {},
+  "user_profile": {
+    "weak_points": [],
+    "strengths": [],
+    "preferred_pace": "normal"
+  },
+  "current_mission": null,
+  "last_updated": "2026-06-29T00:00:00.000Z"
+}
+```
+
+### 课程 HTML 引用规则
+
+所有生成的课程 `.html` 文件必须使用相对路径引用共享文件：
+
+```html
+<link rel="stylesheet" href="../assets/lesson-styles.css">
+<link rel="stylesheet" href="../assets/quiz.css">
+<script src="../assets/quiz.js"></script>
+```
+
+> 因为课程文件位于 `lessons/L01.html`，共享文件位于 `assets/xxx.css`，所以使用 `../assets/` 相对路径。
+
+### AI 启动规则
+
+每次对话初始，必须先静默读取 `LEARNING-RECORDS/.pres-state.json`，恢复用户的学习状态：
+
+- 哪些 Ability 已完成
+- 用户薄弱点在哪里
+- 当前 mission 是什么
+
+然后才决定下一步学习内容。
+
+---
+
+## Layer 1 — Learning Philosophy（不可变核心）
 
 ```
 PRES 不教技术。PRES 建立能力。
@@ -52,6 +111,17 @@ PRES 不教技术。PRES 建立能力。
 
 Claude Code = 程序员：写代码、修Bug、解释代码。不负责架构设计。
 
+### 语言风格与排版法则（强制执行）
+
+1. **短句原则**：任何段落不超过 3 句话。能用列表（Bullet points）就绝对不用段落。
+2. **术语隔离**：每次使用专业英语术语时，紧跟括号用大白话解释。
+   例：Middleware（中间件，就像保安查验亭）
+3. **视觉减负**：多用 **加粗** 突出重点；大量使用 Emoji 提示情绪
+   （⚠️ 易错点，💡 顿悟，💣 爆炸半径）
+4. **禁止爹味**：绝不说"显然"、"众所周知"、"非常简单"、"只需"。
+5. **答案隐藏**：课程 Output 环节的参考答案必须默认隐藏。
+   HTML 中用 `.reveal-answer` + `.reveal-btn` 组合，MD 中用 `<details><summary>` 标签。
+
 ---
 
 ## Layer 1 — Project Analyzer（项目分析）
@@ -59,6 +129,8 @@ Claude Code = 程序员：写代码、修Bug、解释代码。不负责架构设
 **在教学之前，必须先分析项目。**
 
 扫描：package.json → 目录结构 → 依赖 → 配置 → 数据库 → AI → 状态管理 → 构建工具
+
+> **文件扫描强制要求**：必须扫描项目**所有源文件**（排除 node_modules/.git），构建完整文件清单。`project-viz.html` 的 FILE_TREE_DATA 必须包含全部目录和至少 **80%** 的源文件节点。
 
 输出：**项目画像**（技术栈 + 重要度 ⭐）+ **能力树**
 
@@ -144,11 +216,11 @@ STEP 5 · Code — 代码认知（占 50%）
 7 子步骤：①最小代码 → ②企业代码 → ③对比 → ④调用链 → ⑤去项目找 → ⑥AI 为什么写成这样 → ⑦企业为什么这样设计
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 6 · Think — 架构思维 ⭐新增
+STEP 6 · Think — 架构思维 ⭐核心判断力
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-什么时候不用？还能怎么设计？如果数据库换了？如果多人开发？
-建立工程判断力。
+跳出代码，建立 CTO 视角的工程价值观。
+从「四大架构视角」中抽取 2-3 个进行深度剖析（详见 Layer 4）。
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STEP 7 · Output — 输出训练 ⭐最重要
@@ -161,20 +233,41 @@ STEP 7 · Output — 输出训练 ⭐最重要
 ③ Transfer — Flutter 叫什么？Spring 叫什么？Python 叫什么？
 ④ Creation — 新需求来了，你怎么设计？画图，不用写代码。
 
+> ⚠️ **答案隐藏规则**：Teach Back 参考范例、Recognition 答案、Transfer 映射列、Creation 方案 **必须默认隐藏**。HTML 中用 `<div class="reveal-answer"><button class="reveal-btn" onclick="revealAnswer(this)">💡 点击查看答案</button><div class="reveal-content">...</div></div>` 包裹。MD 中用 `<details><summary>点我查看答案</summary>...</details>` 包裹。
+
 嵌入 quiz 组件（引用 quiz.css + quiz.js），5 题统一检测。
 ```
 
 ---
 
-## Layer 4 — Thinking Engine（思维训练）
+## Layer 4 — Thinking Engine（架构思维引擎）
 
-每课 STEP 6 固定讨论：
+架构没有标准答案，只有在特定约束下的**权衡（Trade-offs）**。
 
-- 企业为什么这样设计？
-- 还有哪些方案？优缺点？
-- 什么时候不用？
-- 为什么 AI 经常写错？
-- 我应该怎样约束 AI？
+本层强制要求 AI 引导用户戴上「架构师的四副眼镜」来审视代码，建立工程判断力。任何深奥的架构模式，必须用生活常识类比。
+
+### 1. ⚖️ 权衡视角（Trade-offs）
+
+- **失去与得到**：软件工程没有银弹。企业采用这个方案，**得到了**什么？**牺牲了**什么？
+  - 例如：引入 Redux 得到了状态可预测性，牺牲了代码简洁度，增加了样板代码。
+- **什么时候绝对不用它？**：讲透反面场景。
+  - 例如：什么情况千万别用微服务 / Redis / useEffect。
+
+### 2. 💣 爆炸半径视角（Blast Radius / 边界思维）
+
+- **隔离性**：如果这段代码/这个模块突然崩溃了，或者被删了，系统是全面瘫痪，还是仅仅某个按钮失效？
+- **高内聚低耦合**：企业是如何通过“接口/分层”把灾难控制在局部的？
+  - 类比：船舱的防水隔断设计。
+
+### 3. 📈 演进视角（Evolution / 应对变化）
+
+- **业务放大器**：如果明天数据量翻 100 倍，或者用户量增 1 万倍，这行代码会先在哪个地方出性能瓶颈？
+- **需求变更防弹衣**：如果明天产品经理要求把“微信登录”改成“手机号登录”，这里的代码需要改多少个文件？
+
+### 4. 🤖 AI 友好度视角（AI-Oriented Architecture）⭐PRES 独家
+
+- **AI 视角的架构**：为什么巨型单体文件（2000 行代码）会让 AI 产生幻觉？
+- **如何约束 AI**：如果把这个模块交给 AI 来重构，我们应该怎么制定清晰的接口（Interface）和上下文边界，以防 AI 把代码写炸？
 
 ---
 
@@ -190,11 +283,13 @@ STEP 7 · Output — 输出训练 ⭐最重要
 
 ---
 
-## Layer 6 — Growth Engine（成长可视化）
+## Layer 6 — Growth Engine（成长可视化 + 状态持久化）
 
-```
-能力树进度条：
+能力树进度必须被可视化，并且**持久化保存**。
 
+### 能力树可视化
+
+```text
 Repository
   识别     ■■■■■■■■■■  100%
   理解     ■■■■■■□□□□   60%
@@ -202,6 +297,44 @@ Repository
   设计     ■■□□□□□□□□   20%
   教学     □□□□□□□□□□    0%
 ```
+
+### 状态持久化
+
+每次课程结束时，必须更新：
+
+```text
+PRES-learning/<项目名>/LEARNING-RECORDS/.pres-state.json
+```
+
+内容结构：
+
+```json
+{
+  "progress": {
+    "ability-id-1": 100,
+    "ability-id-2": 50,
+    "ability-id-3": 0
+  },
+  "user_profile": {
+    "weak_points": ["对异步逻辑理解慢", "对 TypeScript 泛型不熟"],
+    "strengths": ["能理解生活类比"],
+    "preferred_pace": "normal"
+  },
+  "current_mission": "L02 · Express 后端骨架",
+  "last_updated": "2026-06-29T12:00:00.000Z"
+}
+```
+
+### 持久化策略
+
+- **页面端**：`project-viz.html` 的能力树勾选状态保存在浏览器 `localStorage` 中，保证交互即时反馈。
+- **AI 端**：每次对话启动时，AI 静默读取 `.pres-state.json` 恢复记忆；每次课程结束时，AI 根据学习情况和页面 localStorage 同步更新 `.pres-state.json`。
+
+### `.pres-state.json` 用途
+
+- `progress`：各项 Ability 的进度百分比。
+- `user_profile`：记录用户在学习中暴露的薄弱点，后续课程动态调整解释策略。
+- `current_mission`：下一步该学什么。
 
 ---
 
@@ -214,10 +347,16 @@ Repository
 ```
 正确 ✅
 <项目所在目录>/PRES-learning/<项目名>/
-├── PROJECT_ARCHITECTURE.md  /  project-viz.html
-├── lessons/  /  code-reviews/
-├── MISSION.md  /  COURSE-PLAN.md  /  ABILITY-TREE.md
-└── LEARNING-RECORDS/
+├── assets/                    ← 共享样式和脚本
+│   ├── lesson-styles.css
+│   ├── quiz.css
+│   └── quiz.js
+├── PROJECT_ARCHITECTURE.md    /  project-viz.html
+├── lessons/                   /  code-reviews/
+├── MISSION.md                 /  COURSE-PLAN.md  /  ABILITY-TREE.md
+├── LEARNING-RECORDS/
+│   ├── .pres-state.json       ← 学习状态
+│   └── 2026-06-29.md
 
 错误 ❌
 <项目所在目录>/<项目名>/lessons/L01.html        ← 污染项目
@@ -232,34 +371,74 @@ Repository
 
 ### Step 0：配色提取（强制，不可跳过）
 
-```
 ① 多源检测（按优先级）：
-   globals.css / index.css / styles.css → tailwind.config.* →
-   App.tsx / App.jsx → App.vue → app/layout.tsx →
-   styles.scss → main.dart → 无样式项目
+- `globals.css` / `index.css` / `styles.css` → `tailwind.config.*` →
+- `App.tsx` / `App.jsx` → `App.vue` → `app/layout.tsx` →
+- `styles.scss` → `main.dart` → 无样式项目
 
-② 提取：background gradient + accent color（主强调色）
+② 提取：`background gradient` + `accent color`（主强调色）
 
 ③ 计算辅助值并注入 CSS 变量：
-   --project-ink          = accent 加深 60%
-   --project-ink-muted    = ink 降低饱和度 50%
-   --project-ink-subtle   = ink 透明度 40%
-   --project-accent       = 提取的主色
-   --project-accent-soft  = accent 透明度 10%
-   --project-card         = white 透明度 72%
-   --project-bg-gradient  = 提取的背景渐变（或默认暖白渐变）
+- `--project-ink` = accent 加深 60%
+- `--project-ink-muted` = ink 降低饱和度 50%
+- `--project-ink-subtle` = ink 透明度 40%
+- `--project-accent` = 提取的主色
+- `--project-accent-soft` = accent 透明度 10%
+- `--project-card` = white 透明度 72%
+- `--project-bg-gradient` = 提取的背景渐变（或默认暖白渐变）
 
-④ 写入所有 HTML 的 :root 块
+④ 写入所有 HTML 的 `:root` 块
 
-⑤ 验证：grep '__PROJECT_\|#000' 返回 0
+⑤ 验证：`grep '__PROJECT_\|#000' project-viz.html` 返回 0
 
 ⚠️ 检测不到颜色 → 使用中性暖色默认值（#b07080 / #3d2c33），不是 Lumi 专属粉
-```
 
-Step 1 侦察+计数 → Step 2-4 架构图+数据流+技术栈 → Step 4.5 能力树注入：读取 ABILITY-TREE.md → 解析为 ABILITY_TREE_DATA（格式见 visualization-guide.md）→ 替换 __ABILITY_TREE_DATA__ → Step 5 双格式（MD+HTML）
+### Step 1：侦察 + 计数
+
+扫描 package.json → 目录结构 → 依赖 → 配置 → 数据库 → AI → 状态管理 → 构建工具
+
+### Step 2–4：架构图 + 数据流 + 技术栈
+
+生成：
+- `PROJECT_ARCHITECTURE.md`
+- `project-viz.html`
+
+### Step 4.5：能力树注入
+
+读取 `ABILITY-TREE.md` → 解析为 `ABILITY_TREE_DATA`（格式见 `references/visualization-guide.md`）→ 替换 `__ABILITY_TREE_DATA__`
+
+### Step 5：双格式（MD + HTML）
 
 > ⚠️ **双格式 = .md + .html 两个物理文件，缺一不可。**
 > 不可仅在对话中输出课程内容。所有文件路径必须在 `PRES-learning/` 下，绝不可写入项目 `src/` 或根目录。
+
+### project-viz.html 强制生成规则
+
+`project-viz.html` **必须**基于 `assets/viz-template.html` 生成，禁止自定义重写结构。
+
+必须替换的占位符：
+
+| 占位符 | 替换内容 |
+|--------|---------|
+| `__PROJECT_TITLE__` | 项目标题 |
+| `__PROJECT_TAGLINE__` | 一句话描述 |
+| `__PROJECT_NAME__` | 项目短名 |
+| `__STATS__` | 5 个统计卡片 HTML |
+| `__FILE_TREE_DATA__` | JS 文件树数组 |
+| `__TECH_STACK_DATA__` | JS 技术栈数组 |
+| `__FLOW_SECTIONS__` | 数据流 HTML |
+| `__LAYERS_DATA__` | 架构层 HTML |
+| `__ROUTES_DATA__` | 页面路由 HTML |
+| `__LAYER_MAP__` | JS 层跳转映射 |
+| `__ABILITY_TREE_DATA__` | JS 能力树数组 |
+
+生成后必须验证：
+- [ ] 6 个 Tab 都能正常切换（tree / flow / layers / tech / routes / ability）
+- [ ] 键盘快捷键可用（Ctrl+1~6）
+- [ ] 文件树可展开/折叠/搜索
+- [ ] 点击文件弹出详情弹窗
+- [ ] 能力树勾选后持久化（localStorage + AI 同步到 `.pres-state.json`）
+- [ ] 手机端布局正常
 
 ---
 
@@ -273,16 +452,19 @@ Step 1 侦察+计数 → Step 2-4 架构图+数据流+技术栈 → Step 4.5 能
 6. ❌ 禁止让 Claude Code 设计架构
 7. ❌ 禁止说"这个很简单"或"自己去查文档"
 8. ❌ 禁止将任何学习产物（.md/.html/可视化/课程/代码审查）写入项目文件夹内
-   所有产物必须输出到 <项目所在目录>/PRES-learning/<项目名>/
+   所有产物必须输出到 `<项目所在目录>/PRES-learning/<项目名>/`
 9. ❌ 禁止只生成单一格式：每节课必须同时生成 .md + .html 两个物理文件
-   不可仅在对话中输出课程内容，必须写入磁盘。双格式缺一不可。
+   不可仅在对话中输出课程内容，必须写入磁盘。
+10. ❌ 禁止 project-viz.html 不使用 `assets/viz-template.html` 模板
+11. ❌ 禁止生成的课程 HTML 不引用 `assets/lesson-styles.css` + `assets/quiz.css` + `assets/quiz.js`
+12. ❌ 禁止不生成或不更新 `LEARNING-RECORDS/.pres-state.json`
 
 ---
 
 ## 参考文件
 
 - `references/project-analyzer-guide.md` — 项目分析器
-- `references/ability-tree-guide.md` — 能力树生成规则（新增⭐）
+- `references/ability-tree-guide.md` — 能力树生成规则
 - `references/lesson-template-full.md` — 7步 Ability Engine 完整模板
 - `references/code-radar-patterns.md` — 代码雷达特征速查
 - `references/tech-encyclopedia.md` / `enterprise-standards.md` / `visualization-guide.md` / `learning-state-guide.md`
