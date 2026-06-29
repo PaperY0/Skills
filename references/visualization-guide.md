@@ -74,6 +74,7 @@
 | `__ANALOGY_FUNCTION_BODY__` | `getAnalogy()` 函数体，根据文件名返回类比文字 |
 | `__CONSEQUENCE_FUNCTION_BODY__` | `getConsequence()` 函数体 |
 | `__WHEN_FUNCTION_BODY__` | `getWhen()` 函数体 |
+| `__ABILITY_TREE_DATA__` | JS 数组 `[{category, stars, items: [{id, label, progress}]}]`，从 ABILITY-TREE.md 解析生成 |
 
 ### FILE_TREE_DATA 格式
 
@@ -113,6 +114,36 @@ const TECH_STACK = [
 ];
 ```
 
+### ABILITY_TREE_DATA 格式
+
+从 `ABILITY-TREE.md` 按分类 + 能力项解析，每项带 `id`（用于 localStorage 标记完成状态）、`label`（能力名）、`progress`（初始进度）。
+
+```javascript
+const ABILITY_TREE = [
+  {category:'系统认知', stars:0, items:[
+    {id:'sys-dir',   label:'能够看懂目录结构', progress:0},
+    {id:'sys-entry', label:'能够找到项目入口', progress:0},
+    {id:'sys-module',label:'能够理解模块职责', progress:0},
+    {id:'sys-flow',  label:'能够画出数据流', progress:50},
+    {id:'sys-route', label:'能够理解页面跳转', progress:0},
+  ]},
+  {category:'React', stars:5, items:[
+    {id:'react-comp',   label:'能够识别组件', progress:0},
+    {id:'react-jsx',    label:'能够理解 JSX', progress:0},
+    {id:'react-hooks',  label:'能够理解 Hooks', progress:0},
+    {id:'react-props',  label:'能够理解组件通信', progress:0},
+  ]},
+  // ...
+];
+```
+
+**生成规则**：
+- `category` ← ABILITY-TREE.md 中的分类名（如 `## React（⭐⭐⭐⭐⭐）`）
+- `stars` ← 提取 ⭐ 数量（如 5）
+- `items[].id` ← 分类缩写 + 能力缩写，确保唯一（如 `react-comp`）
+- `items[].label` ← ABILITY-TREE.md 中的能力描述文字
+- `items[].progress` ← 初始 0，学完课程后手动勾选设为 100
+
 ### 三个分析函数（已改为读节点字段）
 
 模板中 `getAnalogy(node)` / `getConsequence(node)` / `getWhen(node)` 现在**直接读取节点自带字段**：
@@ -126,11 +157,12 @@ const TECH_STACK = [
 
 生成 HTML 后验证：
 - [ ] 浏览器直接打开能正常显示
-- [ ] 5 个 Tab 都能正常切换
+- [ ] 6 个 Tab 都能正常切换（含能力树）
 - [ ] 文件树可以展开/折叠
 - [ ] 搜索过滤功能正常
 - [ ] 点击文件弹出详情弹窗
-- [ ] 键盘快捷键可用（Ctrl+1~5）
+- [ ] 键盘快捷键可用（Ctrl+1~6）
+- [ ] 能力树显示正确，勾选后可持久化保存
 - [ ] 手机端布局正常
 
 ---

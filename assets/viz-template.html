@@ -630,12 +630,12 @@ function highlightFiles(layer){
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape')closeModal();
   if(e.ctrlKey||e.metaKey){
-    ['tree','flow','layers','tech','routes'].forEach((t,i)=>{
+    ['tree','flow','layers','tech','routes','ability'].forEach((t,i)=>{
       if(e.key===String(i+1)){e.preventDefault();switchTab(t);}
     });
   }
 });
-console.log('📦 项目架构全景图已就绪 — Ctrl+1~5 切换 Tab | 搜索框过滤 | 点击文件看详情');
+console.log('📦 项目架构全景图已就绪 — Ctrl+1~6 切换 Tab | 搜索框过滤 | 点击文件看详情');
 </script>
 </body>
 </html>

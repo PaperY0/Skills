@@ -256,7 +256,7 @@ Repository
 ⚠️ 检测不到颜色 → 使用中性暖色默认值（#b07080 / #3d2c33），不是 Lumi 专属粉
 ```
 
-Step 1 侦察+计数 → Step 2-4 架构图+数据流+技术栈 → Step 5 双格式（MD+HTML）
+Step 1 侦察+计数 → Step 2-4 架构图+数据流+技术栈 → Step 4.5 能力树注入：读取 ABILITY-TREE.md → 解析为 ABILITY_TREE_DATA（格式见 visualization-guide.md）→ 替换 __ABILITY_TREE_DATA__ → Step 5 双格式（MD+HTML）
 
 > ⚠️ **双格式 = .md + .html 两个物理文件，缺一不可。**
 > 不可仅在对话中输出课程内容。所有文件路径必须在 `PRES-learning/` 下，绝不可写入项目 `src/` 或根目录。
